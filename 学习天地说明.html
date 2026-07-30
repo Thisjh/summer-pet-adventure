@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学习天地 · 每日轮换说明</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+  color: #333;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.header h1 {
+  font-size: 32px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+.header p {
+  color: #888;
+  font-size: 15px;
+}
+
+/* 核心规则卡片 */
+.rules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.rule-card {
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
+.rule-card .icon { font-size: 32px; margin-bottom: 8px; }
+.rule-card .title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+.rule-card .desc { font-size: 13px; color: #666; }
+
+/* 学科标签 */
+.subject-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.subject-tab {
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  background: #f0f0f0;
+  color: #666;
+  transition: all 0.2s;
+}
+.subject-tab.active { color: #fff; border-color: #fff; }
+.subject-tab[data-sub="math"].active { background: #5B9BD5; }
+.subject-tab[data-sub="chinese"].active { background: #E74C3C; }
+.subject-tab[data-sub="english"].active { background: #27AE60; }
+.subject-tab[data-sub="reading"].active { background: #E17055; }
+
+.subject-panel { display: none; }
+.subject-panel.active { display: block; }
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 20px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.badge {
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.badge.review { background: #FFF3CD; color: #856404; }
+.badge.preview { background: #D1ECF1; color: #0C5460; }
+
+.content-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.content-table th {
+  background: #f8f9fa;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid #e0e0e0;
+}
+.content-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.content-table tr:hover { background: #f8f9fa; }
+.type-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.type-flashcard { background: #E8F5E9; color: #2E7D32; }
+.type-quiz { background: #FFF3E0; color: #E65100; }
+.type-practice { background: #E3F2FD; color: #1565C0; }
+.type-word_problem { background: #F3E5F5; color: #7B1FA2; }
+.type-reading { background: #FBE9E7; color: #BF360C; }
+
+.rotation-demo {
+  background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 24px 0;
+  text-align: center;
+}
+.rotation-demo h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.day-cards {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.day-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  min-width: 120px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.day-card .day-label { font-weight: 700; font-size: 13px; color: #667eea; margin-bottom: 4px; }
+.day-card .day-items { font-size: 12px; color: #555; line-height: 1.6; }
+
+.summary-box {
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 24px 0;
+}
+.summary-box h3 { font-size: 18px; margin-bottom: 12px; }
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+.summary-item {
+  background: rgba(255,255,255,0.7);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+.summary-item .num { font-size: 24px; font-weight: 800; color: #333; }
+.summary-item .label { font-size: 12px; color: #666; margin-top: 2px; }
+
+.mode-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.mode-item {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 4px solid #ccc;
+}
+.mode-item.flashcard { border-left-color: #2E7D32; }
+.mode-item.quiz { border-left-color: #E65100; }
+.mode-item.practice { border-left-color: #1565C0; }
+.mode-item.reading { border-left-color: #BF360C; }
+.mode-item .mode-icon { font-size: 24px; }
+.mode-item .mode-name { font-weight: 700; font-size: 14px; margin: 4px 0; }
+.mode-item .mode-desc { font-size: 12px; color: #666; line-height: 1.5; }
+
+.coin-info {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  margin: 20px 0;
+  color: #fff;
+}
+.coin-info .big { font-size: 28px; font-weight: 800; margin: 4px 0; }
+
+@media (max-width: 600px) {
+  .container { padding: 20px; }
+  .header h1 { font-size: 24px; }
+  .content-table { font-size: 12px; }
+  .content-table th, .content-table td { padding: 8px 6px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📚 学习天地 · 每日轮换说明</h1>
+    <p>小学二年级升三年级 · 暑假学习工作台 · 约30天打卡内容</p>
+  </div>
+
+  <!-- 核心规则 -->
+  <div class="rules">
+    <div class="rule-card">
+      <div class="icon">📅</div>
+      <div class="title">每天自动轮换</div>
+      <div class="desc">每个学科每天从12项题库中<br>自动挑选2项不同内容</div>
+    </div>
+    <div class="rule-card">
+      <div class="icon">🔄</div>
+      <div class="title">进度每日重置</div>
+      <div class="desc">第二天学习进度归零<br>可重新完成赚金币</div>
+    </div>
+    <div class="rule-card">
+      <div class="icon">🪙</div>
+      <div class="title">完成即奖励</div>
+      <div class="desc">每完成1项学习 +5金币<br>全对额外翻倍庆祝</div>
+    </div>
+    <div class="rule-card">
+      <div class="icon">📊</div>
+      <div class="title">四科全覆盖</div>
+      <div class="desc">数学·语文·英语·阅读<br>复习+预习双轨并行</div>
+    </div>
+  </div>
+
+  <!-- 轮换机制示意 -->
+  <div class="rotation-demo">
+    <h3>🔁 轮换机制示意（以数学复习12项为例）</h3>
+    <p style="font-size:13px;color:#555;margin-bottom:12px;">题库共12项，每天选2项，按日期哈希自动轮换，6天覆盖一轮</p>
+    <div class="day-cards">
+      <div class="day-card">
+        <div class="day-label">第1天</div>
+        <div class="day-items">100以内加减法<br>乘法口诀表</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">第2天</div>
+        <div class="day-items">认识时间<br>认识图形</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">第3天</div>
+        <div class="day-items">应用题<br>混合运算</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">第4天</div>
+        <div class="day-items">长度单位<br>角的认识</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">第5天</div>
+        <div class="day-items">有余数除法<br>克与千克</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">第6+天</div>
+        <div class="day-items">数据收集<br>对称图形</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:#777;margin-top:12px;">* 实际轮换顺序由日期哈希算法决定，每天内容不同。12项选2项共有66种组合，30天不重复</p>
+  </div>
+
+  <!-- 金币奖励 -->
+  <div class="coin-info">
+    <div style="font-size:16px;font-weight:600;">💰 每日学习金币收益</div>
+    <div class="big">每天最多 80 🪙</div>
+    <div style="font-size:13px;">4个学科 × 每科每天4项 × 每项5金币 = 80金币</div>
+    <div style="font-size:12px;margin-top:4px;opacity:0.85;">30天全勤累计可赚 2400 🪙</div>
+  </div>
+
+  <!-- 学习模式说明 -->
+  <h3 style="margin:24px 0 12px;font-size:18px;">🎮 四种学习模式</h3>
+  <div class="mode-list">
+    <div class="mode-item flashcard">
+      <div class="mode-icon">🎴</div>
+      <div class="mode-name">闪卡学习</div>
+      <div class="mode-desc">正面提问、背面答案，点击翻卡记忆，适合背诵和积累</div>
+    </div>
+    <div class="mode-item quiz">
+      <div class="mode-icon">❓</div>
+      <div class="mode-name">趣味测验</div>
+      <div class="mode-desc">四选一选择题，即时判对错，答对有鼓励动画</div>
+    </div>
+    <div class="mode-item practice">
+      <div class="mode-icon">✏️</div>
+      <div class="mode-name">练习题</div>
+      <div class="mode-desc">填空作答，数学运算自动出题，应用题联系生活</div>
+    </div>
+    <div class="mode-item reading">
+      <div class="mode-icon">📖</div>
+      <div class="mode-name">阅读理解</div>
+      <div class="mode-desc">先读短文，再答4道理解题，培养阅读习惯</div>
+    </div>
+  </div>
+
+  <!-- 学科导航 -->
+  <div class="subject-nav">
+    <div class="subject-tab active" data-sub="math" onclick="switchSubject('math')">🔢 数学</div>
+    <div class="subject-tab" data-sub="chinese" onclick="switchSubject('chinese')">📝 语文</div>
+    <div class="subject-tab" data-sub="english" onclick="switchSubject('english')">🔤 英语</div>
+    <div class="subject-tab" data-sub="reading" onclick="switchSubject('reading')">📖 阅读</div>
+  </div>
+
+  <!-- 数学 -->
+  <div class="subject-panel active" id="panel-math">
+    <div class="section-title">🔢 数学 - 复习 <span class="badge review">二年级</span><span style="font-size:13px;color:#888;">12项，每日2项</span></div>
+    <table class="content-table">
+      <thead><tr><th>#</th><th>名称</th><th>类型</th><th>内容说明</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>100以内加减法</td><td><span class="type-tag type-practice">✏️ 练习</span></td><td>自动生成加减运算题 10题/次</td></tr>
+        <tr><td>2</td><td>乘法口诀表</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>1-9乘法口诀翻卡记忆 8张卡片</td></tr>
+        <tr><td>3</td><td>认识时间</td><td><span class="type-tag type-practice">✏️ 练习</span></td><td>读时钟，支持"3点整""6点半"等</td></tr>
+        <tr><td>4</td><td>认识图形</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>正方形、三角形、圆形辨认 4题</td></tr>
+        <tr><td>5</td><td>生活中的应用题</td><td><span class="type-tag type-word_problem">✏️ 应用</span></td><td>买文具、分糖果等实际问题 10题</td></tr>
+        <tr><td>6</td><td>混合运算</td><td><span class="type-tag type-practice">✏️ 练习</span></td><td>加减乘除混合，先乘除后加减 10题</td></tr>
+        <tr><td>7</td><td>长度单位</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>厘米、米的认识和换算 4题</td></tr>
+        <tr><td>8</td><td>角的认识</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>锐角、直角、钝角的辨识 4题</td></tr>
+        <tr><td>9</td><td>有余数的除法</td><td><span class="type-tag type-practice">✏️ 练习</span></td><td>带余数的除法运算 10题</td></tr>
+        <tr><td>10</td><td>克与千克</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>质量单位的认识和换算 4题</td></tr>
+        <tr><td>11</td><td>数据收集整理</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>统计表、"正"字记录法 4题</td></tr>
+        <tr><td>12</td><td>对称图形</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>轴对称图形的认识 4题</td></tr>
+      </tbody>
+    </table>
+    <div class="section-title">🔢 数学 - 预习 <span class="badge preview">三年级</span><span style="font-size:13px;color:#888;">12项，每日2项</span></div>
+    <table class="content-table">
+      <thead><tr><th>#</th><th>名称</th><th>类型</th><th>内容说明</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>除法初步认识</td><td><span class="type-tag type-practice">✏️ 练习</span></td><td>预习除法概念，自动出题 10题</td></tr>
+        <tr><td>2</td><td>分数初步认识</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>切披萨、分蛋糕理解分数 4张卡</td></tr>
+        <tr><td>3</td><td>周长计算</td><td><span class="type-tag type-practice">✏️ 练习</span></td><td>长方形和正方形周长，自动出题</td></tr>
+        <tr><td>4</td><td>万以内加减法</td><td><span class="type-tag type-practice">✏️ 练习</span></td><td>大数运算入门 10题/次</td></tr>
+        <tr><td>5</td><td>三年级应用题</td><td><span class="type-tag type-word_problem">✏️ 应用</span></td><td>两步运算、周长+购物进阶题 10题</td></tr>
+        <tr><td>6</td><td>多位数乘一位数</td><td><span class="type-tag type-practice">✏️ 练习</span></td><td>两位数、三位数乘一位数 10题</td></tr>
+        <tr><td>7</td><td>认识小数</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>小数点和十分位 4张卡</td></tr>
+        <tr><td>8</td><td>年、月、日</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>日历、时间单位 4题</td></tr>
+        <tr><td>9</td><td>面积初步</td><td><span class="type-tag type-practice">✏️ 练习</span></td><td>长方形和正方形面积 8题</td></tr>
+        <tr><td>10</td><td>位置与方向</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>东南西北的认识 4题</td></tr>
+        <tr><td>11</td><td>集合与重叠</td><td><span class="type-tag type-word_problem">✏️ 应用</span></td><td>韦恩图简单应用 4题</td></tr>
+        <tr><td>12</td><td>归一归总问题</td><td><span class="type-tag type-word_problem">✏️ 应用</span></td><td>三年级典型应用题 4题</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 语文 -->
+  <div class="subject-panel" id="panel-chinese">
+    <div class="section-title">📝 语文 - 复习 <span class="badge review">二年级</span><span style="font-size:13px;color:#888;">12项，每日2项</span></div>
+    <table class="content-table">
+      <thead><tr><th>#</th><th>名称</th><th>类型</th><th>内容说明</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>二年级生字复习</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>美丽、勤劳、仔细、勇敢等重点词 6张卡</td></tr>
+        <tr><td>2</td><td>古诗背诵</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>静夜思、春晓、咏鹅、悯农 4首</td></tr>
+        <tr><td>3</td><td>词语积累</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>近义词、反义词选择题 4题</td></tr>
+        <tr><td>4</td><td>量词搭配</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>一(本)书、一(朵)花等 5题</td></tr>
+        <tr><td>5</td><td>好词积累</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>生机勃勃、五颜六色等四字词 8张卡</td></tr>
+        <tr><td>6</td><td>好句欣赏</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>描写春风、小草、花朵等优美句 8张卡</td></tr>
+        <tr><td>7</td><td>多音字辨析</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>长、好、种、只等一字多音 4题</td></tr>
+        <tr><td>8</td><td>标点符号</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>句号、问号、感叹号、逗号 4题</td></tr>
+        <tr><td>9</td><td>修辞手法</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>比喻、拟人、排比、夸张 4张卡</td></tr>
+        <tr><td>10</td><td>部首查字</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>用部首查字典的方法 4题</td></tr>
+        <tr><td>11</td><td>扩写句子</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>让句子更具体生动 4题</td></tr>
+        <tr><td>12</td><td>词语搭配</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>动词名词正确搭配 4题</td></tr>
+      </tbody>
+    </table>
+    <div class="section-title">📝 语文 - 预习 <span class="badge preview">三年级</span><span style="font-size:13px;color:#888;">12项，每日2项</span></div>
+    <table class="content-table">
+      <thead><tr><th>#</th><th>名称</th><th>类型</th><th>内容说明</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>三年级上册生字</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>晨、绒、猜、扬、臂、雀等 6个</td></tr>
+        <tr><td>2</td><td>成语故事</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>守株待兔、画蛇添足等 4个成语</td></tr>
+        <tr><td>3</td><td>阅读理解入门</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>短文阅读后答选择题 3题</td></tr>
+        <tr><td>4</td><td>看图写话</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>助人为乐等主题，学写话结构 3题</td></tr>
+        <tr><td>5</td><td>好词好句</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>精神抖擞、万里无云等含例句 6组</td></tr>
+        <tr><td>6</td><td>三年级古诗</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>望天门山、饮湖上初晴后雨等 4首</td></tr>
+        <tr><td>7</td><td>关联词造句</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>因为所以、虽然但是等 4题</td></tr>
+        <tr><td>8</td><td>修改病句</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>找错误：重复、缺主语、搭配不当 4题</td></tr>
+        <tr><td>9</td><td>描写方法</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>外貌、动作、语言、心理描写 4张卡</td></tr>
+        <tr><td>10</td><td>日记格式</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>日期天气、第一人称写法 4题</td></tr>
+        <tr><td>11</td><td>近义词辨析</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>美丽vs漂亮、思念vs想念等 4题</td></tr>
+        <tr><td>12</td><td>童话阅读</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>童话故事特点、安徒生知多少 4题</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 英语 -->
+  <div class="subject-panel" id="panel-english">
+    <div class="section-title">🔤 英语 - 复习 <span class="badge review">二年级</span><span style="font-size:13px;color:#888;">12项，每日2项</span></div>
+    <table class="content-table">
+      <thead><tr><th>#</th><th>名称</th><th>类型</th><th>内容说明</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>字母ABC</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>A-Apple🍎 B-Banana🍌 等 8张卡</td></tr>
+        <tr><td>2</td><td>颜色单词</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>Red🔴 Blue🔵 Green🟢 等 8张卡</td></tr>
+        <tr><td>3</td><td>数字单词</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>one to twenty 数字英语互译 4题</td></tr>
+        <tr><td>4</td><td>日常问候</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>Hello, Good morning, Thank you 4题</td></tr>
+        <tr><td>5</td><td>身体部位</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>Head🤕 Hand✋ Foot🦶 等 8张卡</td></tr>
+        <tr><td>6</td><td>家庭成员</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>Father👨 Mother👩 Brother👦 8张卡</td></tr>
+        <tr><td>7</td><td>天气单词</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>Sunny☀️ Rainy🌧️ Cloudy☁️ 4题</td></tr>
+        <tr><td>8</td><td>教室物品</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>Desk📚 Chair🪑 Book📖 8张卡</td></tr>
+        <tr><td>9</td><td>动作单词</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>Run🏃 Jump🦘 Swim🏊 等 8张卡</td></tr>
+        <tr><td>10</td><td>反义词配对</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>big-small, hot-cold 等 4题</td></tr>
+        <tr><td>11</td><td>星期几</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>Monday to Sunday 4题</td></tr>
+        <tr><td>12</td><td>职业单词</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>Teacher👩‍🏫 Doctor👨‍⚕️ 等 8张卡</td></tr>
+      </tbody>
+    </table>
+    <div class="section-title">🔤 英语 - 预习 <span class="badge preview">三年级</span><span style="font-size:13px;color:#888;">12项，每日2项</span></div>
+    <table class="content-table">
+      <thead><tr><th>#</th><th>名称</th><th>类型</th><th>内容说明</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>动物单词</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>Cat🐱 Dog🐶 Elephant🐘 等 8张卡</td></tr>
+        <tr><td>2</td><td>食物单词</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>Apple🍎 Bread🍞 Milk🥛 等 8张卡</td></tr>
+        <tr><td>3</td><td>简单句型</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>I like... / This is... 等 4题</td></tr>
+        <tr><td>4</td><td>自我介绍</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>My name is... / I am 8 years 4题</td></tr>
+        <tr><td>5</td><td>学校科目</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>Math🔢 English🔤 Music🎵 等 8张卡</td></tr>
+        <tr><td>6</td><td>衣服单词</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>Shirt👔 Dress👗 Shoes👟 等 8张卡</td></tr>
+        <tr><td>7</td><td>地点单词</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>School🏫 Park🌳 Hospital🏥 等 8张卡</td></tr>
+        <tr><td>8</td><td>There be 句型</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>There is/are... 存在句型 4题</td></tr>
+        <tr><td>9</td><td>时间表达</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>What time is it? 问答 4题</td></tr>
+        <tr><td>10</td><td>like 句型</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>Do you like...? Yes/No 4题</td></tr>
+        <tr><td>11</td><td>人称代词</td><td><span class="type-tag type-quiz">❓ 测验</span></td><td>I/you/he/she/it/we/they 4题</td></tr>
+        <tr><td>12</td><td>购物对话</td><td><span class="type-tag type-flashcard">🎴 闪卡</span></td><td>How much is it? 实用句型 6张卡</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 阅读 -->
+  <div class="subject-panel" id="panel-reading">
+    <div class="section-title">📖 阅读 - 复习 <span class="badge review">二年级</span><span style="font-size:13px;color:#888;">10项，每日2项</span></div>
+    <table class="content-table">
+      <thead><tr><th>#</th><th>名称</th><th>类型</th><th>内容说明</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>小蚂蚁搬粮食</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>团结合作 — 小蚂蚁叫朋友搬面包 4题</td></tr>
+        <tr><td>2</td><td>春天来了</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>季节描写 — 小草、花儿、柳树、燕子 4题</td></tr>
+        <tr><td>3</td><td>小乌龟和小兔子</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>寓言故事 — 坚持就是胜利 4题</td></tr>
+        <tr><td>4</td><td>小猫钓鱼</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>做事专心 — 小猫三心二意钓不到鱼 4题</td></tr>
+        <tr><td>5</td><td>秋天的果园</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>观察描写 — 苹果、梨子、柿子丰收 4题</td></tr>
+        <tr><td>6</td><td>勇敢的小松鼠</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>战胜恐惧 — 数到三就跳 4题</td></tr>
+        <tr><td>7</td><td>妈妈的生日</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>感恩亲情 — 最好的礼物是用心 4题</td></tr>
+        <tr><td>8</td><td>下雨了</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>自然现象 — 雨声像打鼓、弹琴 4题</td></tr>
+        <tr><td>9</td><td>小青蛙找家</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>辨别方向 — 白天看太阳，晚上看北极星 4题</td></tr>
+        <tr><td>10</td><td>同桌的你</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>友谊故事 — 乐于助人的同桌小红 4题</td></tr>
+      </tbody>
+    </table>
+    <div class="section-title">📖 阅读 - 预习 <span class="badge preview">三年级</span><span style="font-size:13px;color:#888;">10项，每日2项</span></div>
+    <table class="content-table">
+      <thead><tr><th>#</th><th>名称</th><th>类型</th><th>内容说明</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>美丽的校园</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>校园描写 — 梧桐树、花坛、操场 4题</td></tr>
+        <tr><td>2</td><td>我爱家乡</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>写景抒情 — 小河、高山、野花、果香 4题</td></tr>
+        <tr><td>3</td><td>小小发明家</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>叙事阅读 — 爱动脑筋的小华发明浇花壶 4题</td></tr>
+        <tr><td>4</td><td>第一次做饭</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>成长故事 — 给爸妈惊喜的暖心回忆 4题</td></tr>
+        <tr><td>5</td><td>蒲公英的旅行</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>科普童话 — 种子乘风飞行，生根发芽 4题</td></tr>
+        <tr><td>6</td><td>保护地球妈妈</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>环保主题 — 节约用水、垃圾分类 4题</td></tr>
+        <tr><td>7</td><td>尊老爱幼</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>传统美德 — 公交车上让座的故事 4题</td></tr>
+        <tr><td>8</td><td>小蚂蚁的旅行</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>趣味科普 — 有梦想不怕困难 4题</td></tr>
+        <tr><td>9</td><td>秋游日记</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>日记阅读 — 农场参观、野餐、摘苹果 4题</td></tr>
+        <tr><td>10</td><td>夜空的星星</td><td><span class="type-tag type-reading">📖 阅读</span></td><td>想象阅读 — 北斗七星、北极星、银河 4题</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 汇总统计 -->
+  <div class="summary-box">
+    <h3>📊 内容汇总</h3>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="num">4</div>
+        <div class="label">学科</div>
+      </div>
+      <div class="summary-item">
+        <div class="num">92</div>
+        <div class="label">学习项目</div>
+      </div>
+      <div class="summary-item">
+        <div class="num">16</div>
+        <div class="label">每日轮换内容</div>
+      </div>
+      <div class="summary-item">
+        <div class="num">80</div>
+        <div class="label">每日可赚金币</div>
+      </div>
+      <div class="summary-item">
+        <div class="num">26</div>
+        <div class="label">闪卡主题</div>
+      </div>
+      <div class="summary-item">
+        <div class="num">33</div>
+        <div class="label">测验主题</div>
+      </div>
+      <div class="summary-item">
+        <div class="num">20</div>
+        <div class="label">阅读短文</div>
+      </div>
+      <div class="summary-item">
+        <div class="num">~30</div>
+        <div class="label">可打卡天数</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:16px 0;color:#999;font-size:13px;">
+    学习天地 · 让每天的学习都不一样 · 暑假快乐学习 🌈
+  </div>
+</div>
+
+<script>
+function switchSubject(sub) {
+  document.querySelectorAll('.subject-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.subject-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.subject-tab[data-sub="${sub}"]`).classList.add('active');
+  document.getElementById('panel-' + sub).classList.add('active');
+}
+</script>
+</body>
+</html>
