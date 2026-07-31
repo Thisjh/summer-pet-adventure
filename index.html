@@ -2503,6 +2503,16 @@ body::after {
   }
 }
 
+/* 页面底部访问统计 */
+.page-footer {
+  text-align: center;
+  padding: 12px 16px;
+  margin-top: 8px;
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
 </style>
 </head>
 <body>
@@ -2686,6 +2696,11 @@ body::after {
 
   <!-- ========== Toast 提示 ========== -->
   <div class="toast-container" id="toast-container"></div>
+
+  <!-- ========== 页面底部访问统计 ========== -->
+  <div class="page-footer">
+    <span id="busuanzi_container_site_pv">👀 本站总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>
+  </div>
 
   <script>
 /**
@@ -5843,5 +5858,7 @@ function init() {
 init();
 
 </script>
+<!-- 不蒜子访问统计 -->
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
