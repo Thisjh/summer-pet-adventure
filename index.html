@@ -555,13 +555,83 @@ body::after {
   background: linear-gradient(180deg, transparent, rgba(108,92,231,0.08));
 }
 
-.pet-emoji-large {
-  font-size: 120px;
-  line-height: 1;
+/* ===== 3D 球体宠物包装 ===== */
+.pet-3d-wrapper {
   display: inline-block;
-  animation: petBounce 2s ease-in-out infinite;
   position: relative;
   z-index: 1;
+}
+.pet-3d-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 15%;
+  right: 15%;
+  height: 12px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.pet-3d-wrapper:hover::after {
+  bottom: -2px;
+  left: 25%;
+  right: 25%;
+  height: 6px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.1) 0%, transparent 70%);
+}
+
+.pet-emoji-large {
+  font-size: 120px;
+  line-height: 1.4;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  /* 3D 球体 */
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.25) 40%, rgba(0,0,0,0.06) 100%);
+  border-radius: 50%;
+  padding: 16px 24px;
+  transform: rotateX(8deg) rotateY(-6deg);
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.12),
+    0 2px 6px rgba(0,0,0,0.06),
+    inset 0 -10px 24px rgba(0,0,0,0.08),
+    inset 0 6px 12px rgba(255,255,255,0.55);
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.35s ease;
+  animation: petBounce3D 3s ease-in-out infinite;
+}
+.pet-emoji-large:hover {
+  transform: rotateX(0) rotateY(0) scale(1.15);
+  box-shadow:
+    0 12px 32px rgba(0,0,0,0.18),
+    0 4px 10px rgba(0,0,0,0.1),
+    inset 0 -6px 16px rgba(0,0,0,0.05),
+    inset 0 6px 14px rgba(255,255,255,0.7);
+  animation: petBounce3DHover 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+
+/* 稀有度光晕 */
+.pet-emoji-large[data-rarity="稀有"] { box-shadow: 0 6px 20px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06), 0 0 14px rgba(74,144,217,0.35), inset 0 -10px 24px rgba(0,0,0,0.08), inset 0 6px 12px rgba(255,255,255,0.55); }
+.pet-emoji-large[data-rarity="稀有"]:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.18), 0 4px 10px rgba(0,0,0,0.1), 0 0 22px rgba(74,144,217,0.5), inset 0 -6px 16px rgba(0,0,0,0.05), inset 0 6px 14px rgba(255,255,255,0.7); }
+.pet-emoji-large[data-rarity="史诗"] { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.7) 0%, rgba(200,170,255,0.25) 40%, rgba(130,70,200,0.12) 100%); box-shadow: 0 6px 20px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06), 0 0 18px rgba(155,89,182,0.45), inset 0 -10px 24px rgba(0,0,0,0.08), inset 0 6px 12px rgba(255,255,255,0.5); }
+.pet-emoji-large[data-rarity="史诗"]:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.18), 0 4px 10px rgba(0,0,0,0.1), 0 0 28px rgba(155,89,182,0.6), inset 0 -6px 16px rgba(0,0,0,0.05), inset 0 6px 14px rgba(255,255,255,0.65); }
+.pet-emoji-large[data-rarity="传说"] { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.7) 0%, rgba(255,220,150,0.3) 40%, rgba(200,140,30,0.15) 100%); box-shadow: 0 6px 22px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06), 0 0 22px rgba(243,156,18,0.5), inset 0 -10px 24px rgba(0,0,0,0.08), inset 0 6px 12px rgba(255,255,255,0.5); animation: petBounce3D 3s ease-in-out infinite, glowPulse 2.5s ease-in-out infinite; }
+.pet-emoji-large[data-rarity="传说"]:hover { box-shadow: 0 14px 38px rgba(0,0,0,0.18), 0 4px 10px rgba(0,0,0,0.1), 0 0 35px rgba(243,156,18,0.7), inset 0 -6px 16px rgba(0,0,0,0.05), inset 0 6px 14px rgba(255,255,255,0.65); }
+
+@keyframes petBounce3D {
+  0%, 100% { transform: rotateX(8deg) rotateY(-6deg) translateY(0); }
+  50% { transform: rotateX(8deg) rotateY(-6deg) translateY(-8px); }
+}
+@keyframes petBounce3DHover {
+  0% { transform: rotateX(8deg) rotateY(-6deg) scale(1); }
+  40% { transform: rotateX(-2deg) rotateY(3deg) scale(1.18); }
+  100% { transform: rotateX(0) rotateY(0) scale(1.15); }
+}
+@keyframes glowPulse {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(243,156,18,0.3)); }
+  50% { filter: drop-shadow(0 0 14px rgba(243,156,18,0.6)); }
 }
 
 .pet-adult-img {
@@ -569,15 +639,28 @@ body::after {
   height: 120px;
   object-fit: contain;
   display: inline-block;
-  animation: petBounce 2s ease-in-out infinite;
   position: relative;
   z-index: 1;
-  border-radius: 16px;
+  border-radius: 50%;
+  /* 3D 效果 */
+  transform: rotateX(8deg) rotateY(-6deg);
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.12),
+    0 2px 6px rgba(0,0,0,0.06),
+    inset 0 -10px 24px rgba(0,0,0,0.08),
+    inset 0 6px 12px rgba(255,255,255,0.35);
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.35s ease;
+  animation: petBounce3D 3s ease-in-out infinite;
 }
-
-@keyframes petBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+.pet-adult-img:hover {
+  transform: rotateX(0) rotateY(0) scale(1.15);
+  box-shadow:
+    0 12px 32px rgba(0,0,0,0.18),
+    0 4px 10px rgba(0,0,0,0.1),
+    inset 0 -6px 16px rgba(0,0,0,0.05),
+    inset 0 6px 14px rgba(255,255,255,0.5);
+  animation: petBounce3DHover 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
 }
 
 .pet-name-large {
@@ -941,7 +1024,22 @@ body::after {
 
 .pet-list-item .pet-list-emoji {
   font-size: 28px;
+  display: inline-block;
+  /* 迷你 3D */
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 50%, rgba(0,0,0,0.03) 100%);
+  border-radius: 50%;
+  padding: 4px 6px;
+  transform: rotateX(5deg) rotateY(-3deg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 -4px 10px rgba(0,0,0,0.04), inset 0 2px 6px rgba(255,255,255,0.4);
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
 }
+.pet-list-item .pet-list-emoji:hover {
+  transform: rotateX(0) rotateY(0) scale(1.2);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12), inset 0 -2px 6px rgba(0,0,0,0.02), inset 0 2px 8px rgba(255,255,255,0.55);
+}
+.pet-list-item .pet-list-emoji[data-rarity="稀有"] { box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 0 5px rgba(74,144,217,0.2), inset 0 -4px 10px rgba(0,0,0,0.04), inset 0 2px 6px rgba(255,255,255,0.4); }
+.pet-list-item .pet-list-emoji[data-rarity="史诗"] { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.55) 0%, rgba(200,170,255,0.18) 50%, rgba(130,70,200,0.05) 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 0 8px rgba(155,89,182,0.25), inset 0 -4px 10px rgba(0,0,0,0.04), inset 0 2px 6px rgba(255,255,255,0.35); }
+.pet-list-item .pet-list-emoji[data-rarity="传说"] { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.55) 0%, rgba(255,220,150,0.22) 50%, rgba(200,140,30,0.06) 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 0 10px rgba(243,156,18,0.35), inset 0 -4px 10px rgba(0,0,0,0.04), inset 0 2px 6px rgba(255,255,255,0.35); }
 
 .pet-list-item .pet-list-name {
   flex: 1;
@@ -1021,8 +1119,29 @@ body::after {
 .shop-item-emoji {
   font-size: 56px;
   margin-bottom: 8px;
-  display: block;
+  display: inline-block;
+  /* 3D 球体 */
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.15) 45%, rgba(0,0,0,0.04) 100%);
+  border-radius: 50%;
+  padding: 8px 12px;
+  transform: rotateX(6deg) rotateY(-4deg);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08), inset 0 -6px 16px rgba(0,0,0,0.05), inset 0 3px 8px rgba(255,255,255,0.45);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
 }
+.shop-item-emoji:hover {
+  transform: rotateX(0) rotateY(0) scale(1.22);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.14), inset 0 -4px 10px rgba(0,0,0,0.03), inset 0 3px 10px rgba(255,255,255,0.6);
+  animation: shopEmojiPop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes shopEmojiPop {
+  0% { transform: rotateX(6deg) rotateY(-4deg) scale(1); }
+  40% { transform: rotateX(-3deg) rotateY(3deg) scale(1.28); }
+  100% { transform: rotateX(0) rotateY(0) scale(1.22); }
+}
+/* 商店稀有度光晕 */
+.shop-item-emoji[data-rarity="稀有"] { box-shadow: 0 4px 14px rgba(0,0,0,0.08), 0 0 8px rgba(74,144,217,0.25), inset 0 -6px 16px rgba(0,0,0,0.05), inset 0 3px 8px rgba(255,255,255,0.45); }
+.shop-item-emoji[data-rarity="史诗"] { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.6) 0%, rgba(200,170,255,0.2) 45%, rgba(130,70,200,0.08) 100%); box-shadow: 0 4px 14px rgba(0,0,0,0.08), 0 0 12px rgba(155,89,182,0.3), inset 0 -6px 16px rgba(0,0,0,0.05), inset 0 3px 8px rgba(255,255,255,0.4); }
+.shop-item-emoji[data-rarity="传说"] { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.6) 0%, rgba(255,220,150,0.25) 45%, rgba(200,140,30,0.1) 100%); box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 0 15px rgba(243,156,18,0.4), inset 0 -6px 16px rgba(0,0,0,0.05), inset 0 3px 8px rgba(255,255,255,0.4); }
 
 .shop-item-name {
   font-size: 16px;
@@ -1787,7 +1906,20 @@ body::after {
 
 .feed-pet-info .feed-pet-emoji {
   font-size: 60px;
+  display: inline-block;
+  /* 3D 球体 */
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.2) 40%, rgba(0,0,0,0.05) 100%);
+  border-radius: 50%;
+  padding: 10px 14px;
+  transform: rotateX(7deg) rotateY(-5deg);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1), inset 0 -8px 18px rgba(0,0,0,0.06), inset 0 4px 10px rgba(255,255,255,0.5);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
 }
+.feed-pet-info .feed-pet-emoji:hover {
+  transform: rotateX(0) rotateY(0) scale(1.18);
+  box-shadow: 0 8px 26px rgba(0,0,0,0.16), inset 0 -4px 12px rgba(0,0,0,0.04), inset 0 4px 12px rgba(255,255,255,0.6);
+}
+.feed-pet-info .feed-pet-emoji[data-rarity="传说"] { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.65) 0%, rgba(255,220,150,0.28) 40%, rgba(200,140,30,0.12) 100%); box-shadow: 0 4px 16px rgba(0,0,0,0.1), 0 0 16px rgba(243,156,18,0.4), inset 0 -8px 18px rgba(0,0,0,0.06), inset 0 4px 10px rgba(255,255,255,0.45); }
 
 .feed-pet-info .feed-pet-name {
   font-size: 18px;
@@ -2098,6 +2230,7 @@ body::after {
 
   .pet-emoji-large {
     font-size: 80px;
+    padding: 12px 18px;
   }
   .pet-adult-img {
     width: 80px;
@@ -2392,6 +2525,7 @@ body::after {
 
   .shop-item-emoji {
     font-size: 36px;
+    padding: 6px 8px;
   }
 
   .shop-item-name {
@@ -2453,6 +2587,7 @@ body::after {
 
   .pet-emoji-large {
     font-size: 70px;
+    padding: 10px 16px;
   }
   .pet-adult-img {
     width: 70px;
@@ -2504,7 +2639,7 @@ body::after {
   }
 }
 
-/* 页面底部访问统计 */
+/* ===== 页面底部访问统计 ===== */
 .page-footer {
   text-align: center;
   padding: 12px 16px;
@@ -4044,6 +4179,8 @@ const ACHIEVEMENTS = [
   { id: 'a10', name: '宠物乐园', icon: '🌈', desc: '拥有10只宠物', condition: (s) => s.petsOwned >= 10 },
 ];
 
+</script>
+  <script>
 /**
  * 小学二升三暑假养宠大作战 - 主应用逻辑
  */
@@ -4538,15 +4675,19 @@ function getPetGrowthEmoji(petId) {
 
 // 获取宠物展示HTML（成年期有图片的用img标签，否则用emoji）
 function getPetDisplayHtml(petId) {
+  const pet = PETS.find(p => p.id === petId);
   const growth = PET_GROWTH[petId];
   const stage = getPetGrowthStage(petId);
+  const rarity = pet?.rarity || '普通';
   if (growth && stage === 'adult' && growth.adultImage) {
-    return `<img src="${growth.adultImage}" class="pet-adult-img" alt="宠物形象" 
+    return `<div class="pet-3d-wrapper" data-rarity="${rarity}">
+      <img src="${growth.adultImage}" class="pet-adult-img" alt="宠物形象" 
       onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
-      /><span class="pet-emoji-large" style="display:none">${growth.adult}</span>`;
+      /><span class="pet-emoji-large" style="display:none">${growth.adult}</span>
+    </div>`;
   }
   const emoji = getPetGrowthEmoji(petId);
-  return `<span class="pet-emoji-large">${emoji}</span>`;
+  return `<div class="pet-3d-wrapper" data-rarity="${rarity}"><span class="pet-emoji-large">${emoji}</span></div>`;
 }
 
 // 获取成长阶段中文名
@@ -4659,7 +4800,7 @@ function renderPetHome() {
     const gEmoji = getPetGrowthEmoji(pid);
     return `
       <div class="pet-list-item ${pid === state.activePetId ? 'active' : ''}" onclick="switchActivePet('${pid}')">
-        <span class="pet-list-emoji">${gEmoji}</span>
+        <span class="pet-list-emoji" data-rarity="${p.rarity || '普通'}">${gEmoji}</span>
         <span class="pet-list-name">${getPetDisplayName(pid)}</span>
         <span class="pet-list-status">${m.emoji}</span>
       </div>
@@ -4799,13 +4940,14 @@ function openFeedModal(petId) {
   }).join('');
 
   const gEmoji = getPetGrowthEmoji(petId);
+  const rarity = pet?.rarity || '普通';
   content.innerHTML = `
     <div class="modal-header">
       <h2>🍖 给${getPetDisplayName(petId)}喂食</h2>
       <button class="modal-close" onclick="closeFeedModal()">✕</button>
     </div>
     <div class="feed-pet-info">
-      <span class="feed-pet-emoji" id="feed-pet-emoji">${gEmoji}</span>
+      <span class="feed-pet-emoji" data-rarity="${rarity}">${gEmoji}</span>
       <div class="feed-pet-name">${getPetDisplayName(petId)}</div>
     </div>
     <p style="text-align:center;color:var(--text-soft);font-size:13px;margin-bottom:16px;">
@@ -4983,7 +5125,7 @@ function renderShop() {
 
       html += `
         <div class="shop-item ${owned ? 'owned' : ''}">
-          <span class="shop-item-emoji">${pet.emoji}</span>
+          <span class="shop-item-emoji" data-rarity="${pet.rarity}">${pet.emoji}</span>
           <div class="shop-item-name">${pet.name}</div>
           <div class="shop-item-desc">${pet.desc}</div>
           ${PET_GROWTH[pet.id] ? '<div class="shop-growth-tag">🌱 可成长</div>' : ''}
@@ -5887,7 +6029,6 @@ function init() {
 init();
 
 </script>
-<!-- 不蒜子访问统计 -->
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
