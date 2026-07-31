@@ -1114,6 +1114,7 @@ body::after {
 
 .food-stat.hunger { background: #FFE5E5; color: #C0392B; }
 .food-stat.happiness { background: #FFF3CD; color: #856404; }
+.food-stat.energy { background: #E3F0FF; color: #2471A3; }
 
 /* ===== 学习天地 ===== */
 .subject-tabs {
@@ -2920,36 +2921,42 @@ const PET_GROWTH = {
 
 // ========== 宠物食物 ==========
 const PET_FOODS = [
-  { id: 'f1', name: '普通饲料', emoji: '🍚', price: 2, hunger: 30, happiness: 5, desc: '基础食物，填饱肚子' },
-  { id: 'f2', name: '小鱼干', emoji: '🐟', price: 4, hunger: 40, happiness: 15, desc: '小宠物最爱的零食' },
-  { id: 'f3', name: '水果拼盘', emoji: '🍓', price: 5, hunger: 25, happiness: 30, desc: '新鲜水果，心情大好' },
-  { id: 'f4', name: '豪华大餐', emoji: '🍱', price: 8, hunger: 60, happiness: 35, desc: '营养丰富的满汉全席' },
-  { id: 'f5', name: '彩虹蛋糕', emoji: '🎂', price: 6, hunger: 20, happiness: 50, desc: '超级美味的甜点' },
-  { id: 'f6', name: '能量药水', emoji: '🧪', price: 7, hunger: 35, happiness: 35, desc: '神奇的恢复药水' },
-  { id: 'f7', name: '冰淇淋', emoji: '🍦', price: 4, hunger: 10, happiness: 45, desc: '夏天最爱~凉凉爽爽' },
-  { id: 'f8', name: '牛排大餐', emoji: '🥩', price: 10, hunger: 70, happiness: 40, desc: '顶级美味，超满足' },
-  { id: 'f9', name: '胡萝卜', emoji: '🥕', price: 1, hunger: 15, happiness: 8, desc: '健康又实惠的小零食' },
-  { id: 'f10', name: '蜂蜜罐', emoji: '🍯', price: 5, hunger: 30, happiness: 25, desc: '甜甜的，宠物很喜欢' },
-  { id: 'f11', name: '披萨', emoji: '🍕', price: 6, hunger: 45, happiness: 30, desc: '热腾腾的美味披萨' },
-  { id: 'f12', name: '寿司拼盘', emoji: '🍣', price: 8, hunger: 40, happiness: 35, desc: '精致的日式料理' },
-  { id: 'f13', name: '三明治', emoji: '🥪', price: 3, hunger: 30, happiness: 15, desc: '营养均衡的快捷美食' },
-  { id: 'f14', name: '巧克力', emoji: '🍫', price: 4, hunger: 15, happiness: 40, desc: '甜到心里，幸福感爆棚' },
-  { id: 'f15', name: '棉花糖', emoji: '☁️', price: 3, hunger: 10, happiness: 35, desc: '软绵绵的入口即化' },
-  { id: 'f16', name: '大西瓜', emoji: '🍉', price: 3, hunger: 20, happiness: 25, desc: '夏天来一块，清凉解暑' },
-  { id: 'f17', name: '烤玉米', emoji: '🌽', price: 2, hunger: 18, happiness: 10, desc: '香喷喷的田间美味' },
-  { id: 'f18', name: '脆骨头', emoji: '🦴', price: 3, hunger: 20, happiness: 12, desc: '狗狗的最爱，嘎嘣脆' },
-  { id: 'f19', name: '奶酪', emoji: '🧀', price: 4, hunger: 25, happiness: 20, desc: '浓郁的奶香，营养丰富' },
-  { id: 'f20', name: '甜甜圈', emoji: '🍩', price: 4, hunger: 18, happiness: 35, desc: '圆圆的甜圈，一口一个' },
-  { id: 'f21', name: '黄金鱼子酱', emoji: '🥫', price: 12, hunger: 80, happiness: 50, desc: '传级美食，宠物吃了会发光' },
-  { id: 'f22', name: '海鲜大咖', emoji: '🦞', price: 9, hunger: 55, happiness: 42, desc: '龙虾鲍鱼，豪华享受' },
-  { id: 'f23', name: '冰糖葫芦', emoji: '🍡', price: 3, hunger: 15, happiness: 20, desc: '酸酸甜甜，一串接一串停不下' },
-  { id: 'f24', name: '奶黄包', emoji: '🥟', price: 2, hunger: 18, happiness: 10, desc: '热腾腾的奶香包，软糯美味' },
-  { id: 'f25', name: '珍珠奶茶', emoji: '🧋', price: 5, hunger: 20, happiness: 30, desc: 'Q弹珍珠配甜蜜奶茶，超好喝' },
-  { id: 'f26', name: '烤红薯', emoji: '🍠', price: 3, hunger: 22, happiness: 15, desc: '冬天暖手神器，甜到心里去' },
-  { id: 'f27', name: '三色冰淇淋球', emoji: '🍨', price: 4, hunger: 12, happiness: 40, desc: '三种口味，冰凉一夏' },
-  { id: 'f28', name: '糯米团子', emoji: '🍥', price: 2, hunger: 15, happiness: 18, desc: '软软糯糯，小朋友的最爱' },
-  { id: 'f29', name: '蜜汁鸡腿', emoji: '🍗', price: 6, hunger: 35, happiness: 30, desc: '香嫩多汁，宠物闻到就流口水' },
-  { id: 'f30', name: '星星糖果', emoji: '🍬', price: 3, hunger: 10, happiness: 35, desc: '五颜六色的星星糖，甜蜜蜜' },
+  { id: 'f1', name: '普通饲料', emoji: '🍚', price: 2, hunger: 30, happiness: 5, energy: 0, desc: '基础食物，填饱肚子' },
+  { id: 'f2', name: '小鱼干', emoji: '🐟', price: 4, hunger: 40, happiness: 15, energy: 0, desc: '小宠物最爱的零食' },
+  { id: 'f3', name: '水果拼盘', emoji: '🍓', price: 5, hunger: 25, happiness: 30, energy: 0, desc: '新鲜水果，心情大好' },
+  { id: 'f4', name: '豪华大餐', emoji: '🍱', price: 8, hunger: 60, happiness: 35, energy: 0, desc: '营养丰富的满汉全席' },
+  { id: 'f5', name: '彩虹蛋糕', emoji: '🎂', price: 6, hunger: 20, happiness: 50, energy: 0, desc: '超级美味的甜点' },
+  { id: 'f6', name: '能量药水', emoji: '🧪', price: 7, hunger: 35, happiness: 35, energy: 10, desc: '神奇的恢复药水' },
+  { id: 'f7', name: '冰淇淋', emoji: '🍦', price: 4, hunger: 10, happiness: 45, energy: 0, desc: '夏天最爱~凉凉爽爽' },
+  { id: 'f8', name: '牛排大餐', emoji: '🥩', price: 10, hunger: 70, happiness: 40, energy: 0, desc: '顶级美味，超满足' },
+  { id: 'f9', name: '胡萝卜', emoji: '🥕', price: 1, hunger: 15, happiness: 8, energy: 0, desc: '健康又实惠的小零食' },
+  { id: 'f10', name: '蜂蜜罐', emoji: '🍯', price: 5, hunger: 30, happiness: 25, energy: 0, desc: '甜甜的，宠物很喜欢' },
+  { id: 'f11', name: '披萨', emoji: '🍕', price: 6, hunger: 45, happiness: 30, energy: 0, desc: '热腾腾的美味披萨' },
+  { id: 'f12', name: '寿司拼盘', emoji: '🍣', price: 8, hunger: 40, happiness: 35, energy: 0, desc: '精致的日式料理' },
+  { id: 'f13', name: '三明治', emoji: '🥪', price: 3, hunger: 30, happiness: 15, energy: 0, desc: '营养均衡的快捷美食' },
+  { id: 'f14', name: '巧克力', emoji: '🍫', price: 4, hunger: 15, happiness: 40, energy: 0, desc: '甜到心里，幸福感爆棚' },
+  { id: 'f15', name: '棉花糖', emoji: '☁️', price: 3, hunger: 10, happiness: 35, energy: 0, desc: '软绵绵的入口即化' },
+  { id: 'f16', name: '大西瓜', emoji: '🍉', price: 3, hunger: 20, happiness: 25, energy: 0, desc: '夏天来一块，清凉解暑' },
+  { id: 'f17', name: '烤玉米', emoji: '🌽', price: 2, hunger: 18, happiness: 10, energy: 0, desc: '香喷喷的田间美味' },
+  { id: 'f18', name: '脆骨头', emoji: '🦴', price: 3, hunger: 20, happiness: 12, energy: 0, desc: '狗狗的最爱，嘎嘣脆' },
+  { id: 'f19', name: '奶酪', emoji: '🧀', price: 4, hunger: 25, happiness: 20, energy: 0, desc: '浓郁的奶香，营养丰富' },
+  { id: 'f20', name: '甜甜圈', emoji: '🍩', price: 4, hunger: 18, happiness: 35, energy: 0, desc: '圆圆的甜圈，一口一个' },
+  { id: 'f21', name: '黄金鱼子酱', emoji: '🥫', price: 12, hunger: 80, happiness: 50, energy: 0, desc: '传级美食，宠物吃了会发光' },
+  { id: 'f22', name: '海鲜大咖', emoji: '🦞', price: 9, hunger: 55, happiness: 42, energy: 0, desc: '龙虾鲍鱼，豪华享受' },
+  { id: 'f23', name: '冰糖葫芦', emoji: '🍡', price: 3, hunger: 15, happiness: 20, energy: 0, desc: '酸酸甜甜，一串接一串停不下' },
+  { id: 'f24', name: '奶黄包', emoji: '🥟', price: 2, hunger: 18, happiness: 10, energy: 0, desc: '热腾腾的奶香包，软糯美味' },
+  { id: 'f25', name: '珍珠奶茶', emoji: '🧋', price: 5, hunger: 20, happiness: 30, energy: 0, desc: 'Q弹珍珠配甜蜜奶茶，超好喝' },
+  { id: 'f26', name: '烤红薯', emoji: '🍠', price: 3, hunger: 22, happiness: 15, energy: 0, desc: '冬天暖手神器，甜到心里去' },
+  { id: 'f27', name: '三色冰淇淋球', emoji: '🍨', price: 4, hunger: 12, happiness: 40, energy: 0, desc: '三种口味，冰凉一夏' },
+  { id: 'f28', name: '糯米团子', emoji: '🍥', price: 2, hunger: 15, happiness: 18, energy: 0, desc: '软软糯糯，小朋友的最爱' },
+  { id: 'f29', name: '蜜汁鸡腿', emoji: '🍗', price: 6, hunger: 35, happiness: 30, energy: 0, desc: '香嫩多汁，宠物闻到就流口水' },
+  { id: 'f30', name: '星星糖果', emoji: '🍬', price: 3, hunger: 10, happiness: 35, energy: 0, desc: '五颜六色的星星糖，甜蜜蜜' },
+  // 恢复体力专用食物
+  { id: 'f31', name: '体力药水', emoji: '🧃', price: 6, hunger: 5, happiness: 10, energy: 45, desc: '喝一口体力瞬间回满' },
+  { id: 'f32', name: '闪电糖果', emoji: '⚡', price: 5, hunger: 8, happiness: 20, energy: 30, desc: '噼里啪啦，活力四射' },
+  { id: 'f33', name: '蜂蜜柠檬茶', emoji: '🍋', price: 4, hunger: 12, happiness: 15, energy: 25, desc: '清爽提神，恢复元气' },
+  { id: 'f34', name: '魔法果汁', emoji: '🧉', price: 5, hunger: 10, happiness: 18, energy: 35, desc: '神奇配方，瞬间回能' },
+  { id: 'f35', name: '元气包子', emoji: '🥮', price: 4, hunger: 25, happiness: 8, energy: 20, desc: '热腾腾的包子，吃饱有力气' },
 ];
 
 // ========== 学习内容 - 数学 ==========
@@ -4493,7 +4500,7 @@ function decayAllPets() {
     const hoursPassed = (now - ps.lastUpdate) / (1000 * 60 * 60);
     ps.hunger = Math.max(0, ps.hunger - hoursPassed * 8);
     ps.happiness = Math.max(0, ps.happiness - hoursPassed * 5);
-    ps.energy = Math.max(0, ps.energy - hoursPassed * 3);
+    ps.energy = Math.max(0, ps.energy - hoursPassed * 1);
     ps.lastUpdate = now;
   });
   saveState();
@@ -4786,7 +4793,7 @@ function openFeedModal(petId) {
         <span class="food-emoji">${food.emoji}</span>
         <span class="food-name">${food.name}</span>
         <span class="food-price">🪙 ${food.price}</span>
-        <span class="food-effect">饱+${food.hunger} 乐+${food.happiness}</span>
+        <span class="food-effect">饱+${food.hunger} 乐+${food.happiness}${food.energy ? ' 体+'+food.energy : ''}</span>
       </div>
     `;
   }).join('');
@@ -4827,6 +4834,7 @@ function buyAndFeed(petId, foodId) {
   const ps = state.petStates[petId] || initPetState(petId);
   ps.hunger = Math.min(100, ps.hunger + food.hunger);
   ps.happiness = Math.min(100, ps.happiness + food.happiness);
+  ps.energy = Math.min(100, ps.energy + (food.energy || 0));
   ps.lastUpdate = Date.now();
   state.petStates[petId] = ps;
 
@@ -5000,6 +5008,7 @@ function renderShop() {
           <div class="food-stats">
             <span class="food-stat hunger">饱+${food.hunger}</span>
             <span class="food-stat happiness">乐+${food.happiness}</span>
+            ${food.energy ? `<span class="food-stat energy">体+${food.energy}</span>` : ''}
           </div>
           <div class="shop-item-price">🪙 ${food.price}</div>
           <div style="font-size:12px;color:var(--text-light);margin-bottom:8px;">已有 ${owned} 份</div>
