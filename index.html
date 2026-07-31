@@ -2508,8 +2508,27 @@ body::after {
   text-align: center;
   padding: 12px 16px;
   margin-top: 8px;
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
+}
+.visit-icon {
+  font-size: 1rem;
+  user-select: none;
+}
+.visit-detail {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
   color: var(--text-soft);
   font-size: 0.8rem;
+  transition: max-width 0.4s ease, opacity 0.4s ease;
+}
+.page-footer:hover .visit-detail {
+  max-width: 200px;
   opacity: 0.7;
 }
 
@@ -2699,7 +2718,8 @@ body::after {
 
   <!-- ========== 页面底部访问统计 ========== -->
   <div class="page-footer">
-    <span id="busuanzi_container_site_pv">👀 本站总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="visit-icon">👀</span>
+    <span class="visit-detail" id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>
   </div>
 
   <script>
