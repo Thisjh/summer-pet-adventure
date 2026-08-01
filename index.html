@@ -2668,6 +2668,351 @@ body::after {
   opacity: 0.7;
 }
 
+/* ==================== 宠物公司 ==================== */
+.company-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.company-header h2 { margin: 0; }
+.dispatch-btn {
+  white-space: nowrap;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+}
+
+/* 公司总部 */
+.company-hq {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: linear-gradient(135deg, #F3EFFE 0%, #EDE4FF 100%);
+  border: 2px solid #E0D4FF;
+  border-radius: 20px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 18px rgba(155,126,222,0.12);
+}
+.company-hq-icon {
+  font-size: 56px;
+  line-height: 1;
+  animation: petBounce3D 3s ease-in-out infinite;
+}
+.company-hq-info { flex: 1; }
+.company-hq-name { font-size: 1.3rem; font-weight: 800; color: #6B4FB0; }
+.company-hq-level { font-size: 0.95rem; color: #8B7CC4; margin: 4px 0 8px; }
+.company-hq-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  font-size: 0.85rem;
+  color: #5A4A8A;
+}
+.company-hq-stats span {
+  background: rgba(255,255,255,0.65);
+  border-radius: 10px;
+  padding: 4px 10px;
+}
+
+/* 工具栏 */
+.company-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+.company-pending { font-size: 1rem; color: #5A4A8A; }
+.company-pending b { color: #E8A33D; font-size: 1.25rem; }
+.collect-btn { padding: 10px 18px; }
+
+/* 升级 */
+.company-upgrade {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+  border: 2px dashed #D9CCF5;
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  transition: all 0.3s ease;
+}
+.company-upgrade.ready {
+  border-style: solid;
+  border-color: #B79BF0;
+  background: linear-gradient(135deg, #FBF7FF 0%, #F1EAFF 100%);
+  box-shadow: 0 4px 14px rgba(155,126,222,0.18);
+}
+.upgrade-info { display: flex; flex-direction: column; gap: 3px; }
+.upgrade-title { font-weight: 700; color: #6B4FB0; font-size: 1.05rem; }
+.upgrade-desc { font-size: 0.8rem; color: #9989C0; }
+.upgrade-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  background: #8B5CF6;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+}
+.upgrade-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(139,92,246,0.4); }
+.upgrade-btn:disabled {
+  background: #D6D0E4;
+  color: #fff;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* 员工区 */
+.company-section-title {
+  font-size: 1.1rem;
+  color: #6B4FB0;
+  margin: 4px 0 14px;
+}
+.employee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.employee-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 18px;
+  padding: 16px 14px 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  position: relative;
+}
+.employee-pet {
+  position: relative;
+  margin-bottom: 10px;
+}
+.employee-card .pet-emoji-large {
+  font-size: 52px;
+  padding: 12px 18px;
+  line-height: 1.3;
+}
+.job-prop {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  font-size: 26px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+  z-index: 3;
+}
+.employee-info { text-align: center; width: 100%; }
+.employee-name {
+  font-weight: 700;
+  color: #4A3A7A;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.employee-stage {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #8B7CC4;
+  background: #F0EBFB;
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+.employee-job { margin: 6px 0 4px; }
+.job-badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+.job-badge.act-chef { background: #FF8C42; }
+.job-badge.act-guard { background: #4A90D9; }
+.job-badge.act-singer { background: #E0569B; }
+.job-badge.act-courier { background: #2BB673; }
+.job-badge.act-cleaner { background: #17B0A7; }
+.employee-action-text {
+  font-size: 0.78rem;
+  color: #9989C0;
+  min-height: 18px;
+  margin-bottom: 6px;
+}
+.employee-wage {
+  font-size: 0.82rem;
+  color: #5A4A8A;
+  background: #F7F4FC;
+  border-radius: 10px;
+  padding: 5px 8px;
+}
+.employee-wage b { color: #E8A33D; }
+.employee-off-btn {
+  margin-top: 10px;
+  border: 1.5px solid #E0D4FF;
+  background: #fff;
+  color: #8B7CC4;
+  border-radius: 10px;
+  padding: 5px 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.employee-off-btn:hover { background: #F3EFFE; color: #6B4FB0; }
+
+.company-no-employee {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #9989C0;
+  font-size: 0.95rem;
+  padding: 30px 10px;
+  line-height: 1.8;
+  background: #FBFAFE;
+  border-radius: 16px;
+  border: 1px dashed #E0D4FF;
+}
+
+/* 岗位动作动画 */
+.act-singer .job-prop { animation: floatNote 1.6s ease-in-out infinite; }
+.act-chef .job-prop { animation: flameFlicker 0.5s ease-in-out infinite; }
+.act-guard .job-prop { animation: shieldSway 1.4s ease-in-out infinite; }
+.act-courier .job-prop { animation: carryBounce 0.8s ease-in-out infinite; }
+.act-cleaner .job-prop { animation: bubbleRise 1.8s ease-in-out infinite; }
+.act-singer .pet-emoji-large { animation: petBounce3D 3s ease-in-out infinite, singerTilt 1.6s ease-in-out infinite; }
+.act-guard .pet-emoji-large { animation: petBounce3D 3s ease-in-out infinite, shieldSway 1.4s ease-in-out infinite; }
+.act-courier .pet-emoji-large { animation: carryBounce 0.8s ease-in-out infinite; }
+.act-chef .pet-emoji-large { animation: petBounce3D 3s ease-in-out infinite, chefWobble 1.2s ease-in-out infinite; }
+.act-cleaner .pet-emoji-large { animation: petBounce3D 3s ease-in-out infinite, cleanerSweep 1.6s ease-in-out infinite; }
+
+@keyframes floatNote {
+  0% { transform: translateY(2px) scale(0.9); opacity: 0; }
+  25% { opacity: 1; }
+  100% { transform: translateY(-22px) scale(1.1); opacity: 0; }
+}
+@keyframes flameFlicker {
+  0%, 100% { transform: scale(1) rotate(-6deg); }
+  50% { transform: scale(1.25) rotate(6deg); }
+}
+@keyframes shieldSway {
+  0%, 100% { transform: translateX(-3px) rotate(-10deg); }
+  50% { transform: translateX(3px) rotate(10deg); }
+}
+@keyframes carryBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes bubbleRise {
+  0% { transform: translateY(2px) scale(0.9); opacity: 0; }
+  25% { opacity: 1; }
+  100% { transform: translateY(-20px) scale(1.15); opacity: 0; }
+}
+@keyframes singerTilt {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+@keyframes chefWobble {
+  0%, 100% { transform: rotate(-5deg) translateY(0); }
+  50% { transform: rotate(5deg) translateY(-3px); }
+}
+@keyframes cleanerSweep {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+}
+
+/* 派遣弹窗 */
+.dispatch-modal { max-width: 640px; }
+.dispatch-tip {
+  text-align: center;
+  color: #8B7CC4;
+  font-size: 0.9rem;
+  margin: 4px 0 14px;
+}
+.dispatch-jobs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.dispatch-job {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: #FBFAFE;
+  border: 2px solid #EDE4FF;
+  border-radius: 14px;
+  padding: 12px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.dispatch-job:hover { border-color: #C9B6F2; transform: translateY(-2px); }
+.dispatch-job.selected {
+  border-color: #8B5CF6;
+  background: #F3EFFE;
+  box-shadow: 0 4px 12px rgba(139,92,246,0.2);
+}
+.dispatch-job-emoji { font-size: 30px; }
+.dispatch-job-name { font-weight: 700; color: #5A4A8A; font-size: 0.92rem; }
+.dispatch-job-wage { font-size: 0.72rem; color: #E8A33D; font-weight: 600; }
+.dispatch-job-desc { font-size: 0.7rem; color: #9989C0; text-align: center; }
+.dispatch-section-title { font-size: 1rem; color: #6B4FB0; margin: 4px 0 12px; }
+.dispatch-pets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 12px;
+}
+.dispatch-pet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  border: 2px solid #EDE4FF;
+  border-radius: 14px;
+  padding: 10px 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.dispatch-pet:hover:not(.disabled) { border-color: #C9B6F2; transform: translateY(-2px); }
+.dispatch-pet.disabled { opacity: 0.45; cursor: not-allowed; }
+.dispatch-pet .pet-emoji-large { font-size: 40px; padding: 8px 12px; line-height: 1.2; }
+.dispatch-pet-name { font-size: 0.78rem; font-weight: 600; color: #5A4A8A; }
+.dispatch-pet-stage { font-size: 0.68rem; color: #9989C0; }
+.dispatch-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #9989C0;
+  padding: 24px 10px;
+  background: #FBFAFE;
+  border-radius: 14px;
+  border: 1px dashed #E0D4FF;
+}
+
+/* 宠物公司响应式 */
+@media (max-width: 600px) {
+  .company-hq { flex-direction: column; text-align: center; gap: 10px; }
+  .company-hq-stats { justify-content: center; }
+  .company-toolbar { flex-direction: column; align-items: stretch; }
+  .company-toolbar .collect-btn { width: 100%; }
+  .company-upgrade { flex-direction: column; align-items: stretch; }
+  .company-upgrade .upgrade-btn { width: 100%; }
+  .employee-grid { grid-template-columns: 1fr 1fr; }
+  .dispatch-jobs { grid-template-columns: 1fr 1fr 1fr; }
+}
+@media (max-width: 380px) {
+  .employee-grid { grid-template-columns: 1fr; }
+}
+
 </style>
 </head>
 <body>
@@ -2712,6 +3057,10 @@ body::after {
     <button class="tab-btn" data-tab="shop">
       <span class="tab-icon">🛒</span>
       <span class="tab-label">宠物商店</span>
+    </button>
+    <button class="tab-btn" data-tab="company">
+      <span class="tab-icon">🏢</span>
+      <span class="tab-label">宠物公司</span>
     </button>
     <button class="tab-btn" data-tab="learn">
       <span class="tab-icon">📚</span>
@@ -2797,6 +3146,13 @@ body::after {
       </div>
     </section>
 
+    <!-- ===== 宠物公司 ===== -->
+    <section class="tab-panel" id="panel-company">
+      <div id="company-content">
+        <!-- 由JS生成 -->
+      </div>
+    </section>
+
     <!-- ===== 成长记录 ===== -->
     <section class="tab-panel" id="panel-progress">
       <div class="panel-header">
@@ -2845,6 +3201,13 @@ body::after {
   <!-- ========== 弹窗：宠物改名 ========== -->
   <div class="modal-overlay" id="rename-modal-overlay">
     <div class="modal-content" id="rename-modal-content">
+      <!-- 由JS生成 -->
+    </div>
+  </div>
+
+  <!-- ========== 弹窗：派遣宠物上班 ========== -->
+  <div class="modal-overlay" id="dispatch-overlay">
+    <div class="modal-content dispatch-modal" id="dispatch-content">
       <!-- 由JS生成 -->
     </div>
   </div>
@@ -2963,6 +3326,17 @@ const RARITY_CONFIG = {
   '史诗': { color: '#9B59B6', glow: '0 0 12px rgba(155,89,182,0.5)' },
   '传说': { color: '#F39C12', glow: '0 0 15px rgba(243,156,18,0.6)' },
 };
+
+// ========== 宠物公司岗位 ==========
+// action 字段对应 CSS 动画类：singer(唱歌)/chef(炒菜)/guard(巡逻)/courier(搬运)/cleaner(清洁)
+// prop 字段为岗位专属动作特效 emoji
+const COMPANY_JOBS = [
+  { id: 'chef',    name: '厨师', emoji: '🍳', action: 'chef',    prop: '🔥', baseWage: 2, desc: '颠勺炒菜，香气四溢' },
+  { id: 'guard',   name: '保安', emoji: '🛡️', action: 'guard',   prop: '🛡️', baseWage: 2, desc: '持盾巡逻，守护平安' },
+  { id: 'singer',  name: '歌手', emoji: '🎤', action: 'singer',  prop: '🎵', baseWage: 3, desc: '话筒唱歌，音符飘飞' },
+  { id: 'courier', name: '快递', emoji: '📦', action: 'courier', prop: '📦', baseWage: 2, desc: '搬运包裹，跑来跑去' },
+  { id: 'cleaner', name: '清洁', emoji: '🧹', action: 'cleaner', prop: '🫧', baseWage: 1, desc: '挥舞扫把，泡泡纷飞' },
+];
 
 // ========== 宠物成长阶段 ==========
 // 每个宠物三个成长阶段：幼崽(baby) / 少年(young) / 成年(adult)
@@ -4210,6 +4584,11 @@ let state = {
   checkInDates: [],        // 打卡日期列表
   childName: '小朋友',      // 小朋友名字
   totalLearnAllTime: 0,    // 累计学习完成数（跨天统计）
+  company: {
+    level: 1,              // 公司等级（工资倍率）
+    totalEarned: 0,        // 公司累计营收
+    employees: {},         // { petId: { job: 'chef', lastEarn: 时间戳 } }
+  },
 };
 
 let currentTab = 'tasks';
@@ -4261,6 +4640,9 @@ function loadState() {
         }
       });
     }
+    // 兼容旧数据：确保公司结构存在
+    if (!state.company) state.company = { level: 1, totalEarned: 0, employees: {} };
+    if (!state.company.employees) state.company.employees = {};
   } catch (e) {
     console.error('加载失败:', e);
   }
@@ -5112,6 +5494,242 @@ function getRandomPlayReaction() {
   return reactions[Math.floor(Math.random() * reactions.length)];
 }
 
+// ==================== 宠物公司系统 ====================
+function getAdultPetCount() {
+  return state.pets.filter(pid => getPetGrowthStage(pid) === 'adult').length;
+}
+
+// 升级费用：指数增长 200 × 1.6^(等级-1)
+function companyUpgradeCost() {
+  return Math.floor(200 * Math.pow(1.6, state.company.level - 1));
+}
+
+// 单只宠物待领取工资（离线累计，封顶12小时）
+function pendingEarnings(petId) {
+  const comp = state.company;
+  const emp = comp.employees[petId];
+  if (!emp) return 0;
+  const hours = Math.min(12, (Date.now() - emp.lastEarn) / 3600000);
+  const job = COMPANY_JOBS.find(j => j.id === emp.job);
+  const wage = (job ? job.baseWage : 1) * comp.level;
+  return Math.floor(hours * wage);
+}
+
+function totalPending() {
+  return Object.keys(state.company.employees).reduce((sum, id) => sum + pendingEarnings(id), 0);
+}
+
+function jobActionText(action) {
+  const map = {
+    singer: '🎤 拿话筒唱歌中…',
+    chef: '🍳 颠勺炒菜中…',
+    guard: '🛡️ 持盾巡逻中…',
+    courier: '📦 扛包裹搬运中…',
+    cleaner: '🧹 挥扫把清洁中…',
+  };
+  return map[action] || '工作中…';
+}
+
+// 渲染宠物公司标签页
+function renderCompany() {
+  const panel = document.getElementById('company-content');
+  if (!panel) return;
+  const comp = state.company;
+  const employeeIds = Object.keys(comp.employees);
+  const adultCount = getAdultPetCount();
+  const cost = companyUpgradeCost();
+  const canUpgrade = state.coins >= cost && adultCount >= 3;
+  const pending = totalPending();
+
+  if (state.pets.length === 0) {
+    panel.innerHTML = `
+      <div class="pet-home-empty">
+        <span class="empty-icon">🏢</span>
+        <h3>还没有宠物哦~</h3>
+        <p>先去商店买一只宠物，让它们来公司上班吧！</p>
+        <button class="btn-primary" onclick="switchTab('shop')">🛒 去商店逛逛</button>
+      </div>`;
+    return;
+  }
+
+  const employeeCards = employeeIds.length ? employeeIds.map(pid => {
+    const p = PETS.find(x => x.id === pid);
+    const emp = comp.employees[pid];
+    const job = COMPANY_JOBS.find(j => j.id === emp.job);
+    const stage = getGrowthStageLabel(pid);
+    const gEmoji = getPetGrowthEmoji(pid);
+    const wagePerHour = job.baseWage * comp.level;
+    return `
+      <div class="employee-card">
+        <div class="employee-pet act-${job.action}">
+          <div class="pet-3d-wrapper" data-rarity="${p.rarity || '普通'}">
+            <span class="pet-emoji-large">${gEmoji}</span>
+          </div>
+          <span class="job-prop act-${job.action}">${job.prop}</span>
+        </div>
+        <div class="employee-info">
+          <div class="employee-name">${getPetDisplayName(pid)} <span class="employee-stage">${stage}</span></div>
+          <div class="employee-job"><span class="job-badge act-${job.action}">${job.emoji} ${job.name}</span></div>
+          <div class="employee-action-text">${jobActionText(job.action)}</div>
+          <div class="employee-wage">时薪 <b>${wagePerHour}</b> 🪙 · 已累计 <b id="pending-${pid}">${pendingEarnings(pid)}</b> 🪙</div>
+        </div>
+        <button class="employee-off-btn" onclick="offWorkPet('${pid}')">下班</button>
+      </div>`;
+  }).join('') : `<div class="company-no-employee">还没有宠物在上班 🐾<br>点击「派遣宠物上班」让员工开始赚钱吧！</div>`;
+
+  panel.innerHTML = `
+    <div class="panel-header company-header">
+      <h2>🏢 宠物公司</h2>
+      <button class="btn-primary dispatch-btn" onclick="openDispatchModal()">➕ 派遣宠物上班</button>
+    </div>
+
+    <div class="company-hq">
+      <div class="company-hq-icon">🏢</div>
+      <div class="company-hq-info">
+        <div class="company-hq-name">毛孩子有限公司</div>
+        <div class="company-hq-level">等级 Lv.${comp.level} · 工资倍率 ×${comp.level}</div>
+        <div class="company-hq-stats">
+          <span>👥 在职 ${employeeIds.length} 只</span>
+          <span>🌟 成年宠物 ${adultCount} 只</span>
+          <span>💰 累计营收 ${comp.totalEarned || 0} 🪙</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="company-toolbar">
+      <div class="company-pending">🪙 待领取工资：<b id="company-pending-total">${pending}</b></div>
+      <button class="btn-primary collect-btn" onclick="collectSalary()">💰 一键领工资</button>
+    </div>
+
+    <div class="company-upgrade ${canUpgrade ? 'ready' : ''}">
+      <div class="upgrade-info">
+        <span class="upgrade-title">⬆️ 升级公司</span>
+        <span class="upgrade-desc">提升工资倍率，需 ≥3 只成年宠物</span>
+      </div>
+      <button class="upgrade-btn" onclick="upgradeCompany()" ${canUpgrade ? '' : 'disabled'}>
+        ${canUpgrade ? `升级 (${cost} 🪙)` : (adultCount < 3 ? `需 ${3 - adultCount} 只成年宠物` : `需 ${cost} 🪙`)}
+      </button>
+    </div>
+
+    <h3 class="company-section-title">👷 在职员工 (${employeeIds.length})</h3>
+    <div class="employee-grid">${employeeCards}</div>
+  `;
+}
+
+// 打开派遣弹窗
+let dispatchSelectedJob = null;
+function openDispatchModal() {
+  dispatchSelectedJob = null;
+  renderDispatchModal();
+  document.getElementById('dispatch-overlay').classList.add('active');
+}
+function closeDispatchModal() {
+  document.getElementById('dispatch-overlay').classList.remove('active');
+}
+function renderDispatchModal() {
+  const content = document.getElementById('dispatch-content');
+  const workingIds = Object.keys(state.company.employees);
+  const available = state.pets.filter(pid => !workingIds.includes(pid));
+  const jobCards = COMPANY_JOBS.map(j => `
+    <button class="dispatch-job ${dispatchSelectedJob === j.id ? 'selected' : ''}" onclick="dispatchSelectJob('${j.id}')">
+      <span class="dispatch-job-emoji">${j.emoji}</span>
+      <span class="dispatch-job-name">${j.name}</span>
+      <span class="dispatch-job-wage">时薪 ${j.baseWage}×Lv</span>
+      <span class="dispatch-job-desc">${j.desc}</span>
+    </button>`).join('');
+  const petCards = available.length ? available.map(pid => {
+    const p = PETS.find(x => x.id === pid);
+    const stage = getGrowthStageLabel(pid);
+    const gEmoji = getPetGrowthEmoji(pid);
+    const disabled = !dispatchSelectedJob;
+    return `<button class="dispatch-pet ${disabled ? 'disabled' : ''}" onclick="dispatchAssign('${pid}')" ${disabled ? 'disabled' : ''}>
+      <div class="pet-3d-wrapper" data-rarity="${p.rarity || '普通'}"><span class="pet-emoji-large">${gEmoji}</span></div>
+      <span class="dispatch-pet-name">${getPetDisplayName(pid)}</span>
+      <span class="dispatch-pet-stage">${stage}</span>
+    </button>`;
+  }).join('') : `<p class="dispatch-empty">所有宠物都在上班啦！去把他们换下来吧~</p>`;
+
+  content.innerHTML = `
+    <div class="modal-header">
+      <h2>🏢 派遣宠物上班</h2>
+      <button class="modal-close" onclick="closeDispatchModal()">✕</button>
+    </div>
+    <p class="dispatch-tip">${dispatchSelectedJob ? '已选岗位，点击下方宠物即可上岗 👇' : '第一步：先选一个工作岗位 👇'}</p>
+    <div class="dispatch-jobs">${jobCards}</div>
+    <h3 class="dispatch-section-title">🐾 选择宠物</h3>
+    <div class="dispatch-pets">${petCards}</div>
+  `;
+}
+function dispatchSelectJob(jobId) {
+  dispatchSelectedJob = jobId;
+  renderDispatchModal();
+}
+function dispatchAssign(petId) {
+  if (!dispatchSelectedJob) { showToast('请先选择一个岗位', 'warning'); return; }
+  state.company.employees[petId] = { job: dispatchSelectedJob, lastEarn: Date.now() };
+  saveState();
+  closeDispatchModal();
+  const job = COMPANY_JOBS.find(j => j.id === dispatchSelectedJob);
+  showToast(`🎉 ${getPetDisplayName(petId)} 上岗当${job.name}啦！`, 'success');
+  renderCompany();
+}
+
+// 一键领工资（离线累计，封顶12小时；上班消耗体力，体力耗尽自动下班）
+function collectSalary() {
+  const comp = state.company;
+  const now = Date.now();
+  let total = 0;
+  const toRemove = [];
+  Object.keys(comp.employees).forEach(petId => {
+    const emp = comp.employees[petId];
+    const hours = Math.min(12, (now - emp.lastEarn) / 3600000);
+    const job = COMPANY_JOBS.find(j => j.id === emp.job);
+    const wage = (job ? job.baseWage : 1) * comp.level;
+    total += Math.floor(hours * wage);
+    const ps = state.petStates[petId];
+    if (ps) {
+      ps.energy = Math.max(0, ps.energy - Math.min(ps.energy, hours * 2));
+      ps.lastUpdate = now;
+      if (ps.energy <= 0) toRemove.push(petId);
+    }
+    emp.lastEarn = now;
+  });
+  toRemove.forEach(id => delete comp.employees[id]);
+  if (total > 0) {
+    addCoins(total);
+    comp.totalEarned = (comp.totalEarned || 0) + total;
+    saveState();
+    showToast(`💰 领取了 ${total} 金币工资！`, 'success');
+    launchConfetti();
+  } else {
+    showToast('暂时还没有可领取的工资哦~', 'info');
+  }
+  renderCompany();
+}
+
+// 升级公司（需金币 + ≥3 成年宠物）
+function upgradeCompany() {
+  const comp = state.company;
+  const cost = companyUpgradeCost();
+  const adultCount = getAdultPetCount();
+  if (adultCount < 3) { showToast(`还需 ${3 - adultCount} 只成年宠物才能升级`, 'warning'); return; }
+  if (state.coins < cost) { showToast('金币不够哦，先去赚一点~', 'error'); return; }
+  spendCoins(cost);
+  comp.level += 1;
+  saveState();
+  showToast(`🎉 宠物公司升级到 Lv.${comp.level}！工资 ×${comp.level}`, 'success');
+  launchConfetti();
+  renderCompany();
+}
+
+// 宠物下班
+function offWorkPet(petId) {
+  delete state.company.employees[petId];
+  saveState();
+  renderCompany();
+  showToast(`${getPetDisplayName(petId)} 下班休息啦~`, 'info');
+}
+
 // ==================== 商店系统 ====================
 function renderShop() {
   const container = document.getElementById('shop-content');
@@ -5954,6 +6572,7 @@ function switchTab(tab) {
     case 'shop': renderShop(); break;
     case 'learn': renderLearn(); break;
     case 'progress': renderProgress(); break;
+    case 'company': renderCompany(); break;
   }
 }
 
@@ -6007,6 +6626,9 @@ function init() {
   document.getElementById('rename-modal-overlay').addEventListener('click', (e) => {
     if (e.target.id === 'rename-modal-overlay') closeRenamePet();
   });
+  document.getElementById('dispatch-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'dispatch-overlay') closeDispatchModal();
+  });
 
   // 初始渲染
   renderTasks();
@@ -6023,6 +6645,18 @@ function init() {
     updateDateDisplay();
     if (currentTab === 'tasks') renderTasks();
   }, 60 * 1000);
+
+  // 宠物公司待领取工资实时刷新（每3秒）
+  setInterval(() => {
+    if (currentTab === 'company' && state.company) {
+      Object.keys(state.company.employees).forEach(pid => {
+        const el = document.getElementById('pending-' + pid);
+        if (el) el.textContent = pendingEarnings(pid);
+      });
+      const totalEl = document.getElementById('company-pending-total');
+      if (totalEl) totalEl.textContent = totalPending();
+    }
+  }, 3000);
 }
 
 // 启动
