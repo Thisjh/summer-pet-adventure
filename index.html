@@ -2699,7 +2699,49 @@ body::after {
   animation: petBounce3D 3s ease-in-out infinite;
 }
 .company-hq-info { flex: 1; }
-.company-hq-name { font-size: 1.3rem; font-weight: 800; color: #6B4FB0; }
+.company-hq-name { font-size: 1.3rem; font-weight: 800; color: #6B4FB0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.company-rename-btn {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #6B4FB0;
+  background: #fff;
+  border: 2px solid #D9CFFB;
+  border-radius: 999px;
+  padding: 3px 12px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+.company-rename-btn:hover {
+  background: #6B4FB0;
+  color: #fff;
+  border-color: #6B4FB0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(107,79,176,0.25);
+}
+
+/* 公司改名弹窗 */
+.rename-company-box { padding: 6px 4px; text-align: center; }
+.rename-company-box h3 { margin: 0 0 16px; font-size: 1.25rem; color: #6B4FB0; }
+.rename-company-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+  padding: 12px 16px;
+  border: 2px solid #D9CFFB;
+  border-radius: 14px;
+  outline: none;
+  color: #4A3A7A;
+  text-align: center;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.rename-company-input:focus {
+  border-color: #6B4FB0;
+  box-shadow: 0 0 0 4px rgba(107,79,176,0.15);
+}
+.rename-company-tip { font-size: 0.82rem; color: #9B8CC4; margin: 10px 0 18px; }
+.rename-company-actions { display: flex; gap: 12px; justify-content: center; }
+.rename-company-actions button { flex: 1; padding: 11px 0; font-size: 0.98rem; }
 .company-hq-level { font-size: 0.95rem; color: #8B7CC4; margin: 4px 0 8px; }
 .company-hq-stats {
   display: flex;
@@ -3208,6 +3250,13 @@ body::after {
   <!-- ========== 弹窗：派遣宠物上班 ========== -->
   <div class="modal-overlay" id="dispatch-overlay">
     <div class="modal-content dispatch-modal" id="dispatch-content">
+      <!-- 由JS生成 -->
+    </div>
+  </div>
+
+  <!-- ========== 弹窗：宠物公司改名 ========== -->
+  <div class="modal-overlay" id="rename-company-overlay">
+    <div class="modal-content rename-company-modal" id="rename-company-content">
       <!-- 由JS生成 -->
     </div>
   </div>
@@ -4585,6 +4634,7 @@ let state = {
   childName: '小朋友',      // 小朋友名字
   totalLearnAllTime: 0,    // 累计学习完成数（跨天统计）
   company: {
+    name: '毛孩子有限公司',  // 公司名称（用户可自定义）
     level: 1,              // 公司等级（工资倍率）
     totalEarned: 0,        // 公司累计营收
     employees: {},         // { petId: { job: 'chef', lastEarn: 时间戳 } }
@@ -4641,8 +4691,9 @@ function loadState() {
       });
     }
     // 兼容旧数据：确保公司结构存在
-    if (!state.company) state.company = { level: 1, totalEarned: 0, employees: {} };
+    if (!state.company) state.company = { name: '毛孩子有限公司', level: 1, totalEarned: 0, employees: {} };
     if (!state.company.employees) state.company.employees = {};
+    if (!state.company.name) state.company.name = '毛孩子有限公司';
   } catch (e) {
     console.error('加载失败:', e);
   }
@@ -5586,7 +5637,10 @@ function renderCompany() {
     <div class="company-hq">
       <div class="company-hq-icon">🏢</div>
       <div class="company-hq-info">
-        <div class="company-hq-name">毛孩子有限公司</div>
+        <div class="company-hq-name">
+          <span id="company-name-text">${comp.name}</span>
+          <button class="company-rename-btn" onclick="openRenameCompanyModal()" title="给公司改名">✏️ 改名</button>
+        </div>
         <div class="company-hq-level">等级 Lv.${comp.level} · 工资倍率 ×${comp.level}</div>
         <div class="company-hq-stats">
           <span>👥 在职 ${employeeIds.length} 只</span>
@@ -5728,6 +5782,48 @@ function offWorkPet(petId) {
   saveState();
   renderCompany();
   showToast(`${getPetDisplayName(petId)} 下班休息啦~`, 'info');
+}
+
+// 给宠物公司改名
+function openRenameCompanyModal() {
+  const overlay = document.getElementById('rename-company-overlay');
+  const content = document.getElementById('rename-company-content');
+  content.innerHTML = `
+    <div class="rename-company-box">
+      <h3>🏢 给公司起个名字</h3>
+      <input type="text" id="company-name-input" class="rename-company-input"
+             maxlength="12" placeholder="输入公司名字" value="${state.company.name}">
+      <div class="rename-company-tip">最多 12 个字，给公司起个好听的名字吧！</div>
+      <div class="rename-company-actions">
+        <button class="btn-secondary" onclick="closeRenameCompanyModal()">取消</button>
+        <button class="btn-primary" onclick="confirmRenameCompany()">确认命名</button>
+      </div>
+    </div>`;
+  overlay.classList.add('active');
+  const input = document.getElementById('company-name-input');
+  input.focus();
+  input.select();
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') confirmRenameCompany();
+  });
+}
+function closeRenameCompanyModal() {
+  document.getElementById('rename-company-overlay').classList.remove('active');
+}
+function confirmRenameCompany() {
+  const input = document.getElementById('company-name-input');
+  let name = (input.value || '').trim();
+  if (!name) {
+    showToast('公司名字不能为空哦~', 'warning');
+    return;
+  }
+  if (name.length > 12) name = name.slice(0, 12);
+  const old = state.company.name;
+  state.company.name = name;
+  saveState();
+  closeRenameCompanyModal();
+  renderCompany();
+  if (old !== name) showToast(`🏢 公司改名为「${name}」`, 'success');
 }
 
 // ==================== 商店系统 ====================
