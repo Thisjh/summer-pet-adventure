@@ -2673,25 +2673,28 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
-.company-header h2 { margin: 0; }
+.company-header h2 { margin: 0; color: #9A6B1E; font-size: 1.15rem; }
 .dispatch-btn {
   white-space: nowrap;
-  padding: 10px 16px;
-  font-size: 0.95rem;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  background: linear-gradient(120deg,#D9B45A,#9A6B1E);
+  border: none;
 }
 
-/* 公司总部 */
+/* ===== 方案B：徽章殿堂 · 收藏质感风 ===== */
+/* 公司总部 — 金棕LOGO品牌栏 */
 .company-hq {
   display: flex;
   align-items: center;
-  gap: 18px;
-  background: linear-gradient(135deg, #F3EFFE 0%, #EDE4FF 100%);
-  border: 2px solid #E0D4FF;
-  border-radius: 20px;
-  padding: 20px 24px;
-  margin-bottom: 16px;
-  box-shadow: 0 6px 18px rgba(155,126,222,0.12);
+  gap: 14px;
+  background: linear-gradient(120deg, #FFF7E2, #FBE9C4);
+  border: 1px solid #EADFC9;
+  border-radius: 18px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
 }
 .company-logo {
   flex: 0 0 64px;
@@ -2703,62 +2706,93 @@ body::after {
   animation: petBounce3D 3s ease-in-out infinite;
 }
 .company-hq-info { flex: 1; min-width: 0; }
-.company-hq-name { font-size: 1.3rem; font-weight: 800; color: #6B4FB0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.company-en { font-size: 0.6rem; letter-spacing: 1.5px; color: #B89A5E; font-weight: 700; text-transform: uppercase; }
-.company-rename-btn {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #6B4FB0;
-  background: #fff;
-  border: 2px solid #D9CFFB;
+.company-hq-name { 
+  font-size: 1.15rem; font-weight: 800; color: #5A3D05; 
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; line-height: 1.25; 
+}
+.company-en { 
+  font-size: 0.65rem; letter-spacing: 2px; color: #A98B5A; 
+  font-weight: 700; text-transform: uppercase; display: block; margin-top: 1px; 
+}
+.b-lv-badge {
+  margin-left: auto;
+  background: linear-gradient(120deg, #D9B45A, #9A6B1E);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
   border-radius: 999px;
-  padding: 3px 12px;
+  box-shadow: 0 2px 6px rgba(154,107,30,0.25);
+  white-space: nowrap;
+}
+.company-rename-btn {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #9A6B1E;
+  background: #fff;
+  border: 1.5px solid #D9BC6E;
+  border-radius: 999px;
+  padding: 2px 10px;
   cursor: pointer;
   transition: all 0.18s ease;
   white-space: nowrap;
 }
 .company-rename-btn:hover {
-  background: #6B4FB0;
+  background: #9A6B1E;
   color: #fff;
-  border-color: #6B4FB0;
+  border-color: #9A6B1E;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(107,79,176,0.25);
+  box-shadow: 0 3px 8px rgba(154,107,30,0.25);
 }
 
 /* 公司改名弹窗 */
 .rename-company-box { padding: 6px 4px; text-align: center; }
-.rename-company-box h3 { margin: 0 0 16px; font-size: 1.25rem; color: #6B4FB0; }
+.rename-company-box h3 { margin: 0 0 16px; font-size: 1.25rem; color: #9A6B1E; }
 .rename-company-input {
   width: 100%;
   box-sizing: border-box;
   font-size: 1.1rem;
   padding: 12px 16px;
-  border: 2px solid #D9CFFB;
+  border: 2px solid #D9BC6E;
   border-radius: 14px;
   outline: none;
-  color: #4A3A7A;
+  color: #5A3D05;
   text-align: center;
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 .rename-company-input:focus {
-  border-color: #6B4FB0;
-  box-shadow: 0 0 0 4px rgba(107,79,176,0.15);
+  border-color: #9A6B1E;
+  box-shadow: 0 0 0 4px rgba(154,107,30,0.15);
 }
-.rename-company-tip { font-size: 0.82rem; color: #9B8CC4; margin: 10px 0 18px; }
+.rename-company-tip { font-size: 0.82rem; color: #A98B5A; margin: 10px 0 18px; }
 .rename-company-actions { display: flex; gap: 12px; justify-content: center; }
 .rename-company-actions button { flex: 1; padding: 11px 0; font-size: 0.98rem; }
-.company-hq-level { font-size: 0.95rem; color: #8B7CC4; margin: 4px 0 8px; }
-.company-hq-stats {
+.company-hq-level { font-size: 0.85rem; color: #A98B5A; margin: 4px 0 0; font-weight: 700; }
+
+/* 方案B：成就环形统计卡 */
+.ringrow {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px 18px;
-  font-size: 0.85rem;
-  color: #5A4A8A;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 14px;
 }
-.company-hq-stats span {
-  background: rgba(255,255,255,0.65);
-  border-radius: 10px;
-  padding: 4px 10px;
+.ring {
+  background: #fff;
+  border: 1px solid #EADFC9;
+  border-radius: 12px;
+  padding: 8px 14px;
+  text-align: center;
+  flex: 1;
+  max-width: 140px;
+}
+.ring b {
+  display: block;
+  font-size: 18px;
+  color: #9A6B1E;
+}
+.ring span {
+  font-size: 10px;
+  color: #A98B5A;
 }
 
 /* 工具栏 */
@@ -2768,14 +2802,15 @@ body::after {
   justify-content: space-between;
   gap: 12px;
   background: #fff;
-  border-radius: 16px;
-  padding: 14px 18px;
-  margin-bottom: 14px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border: 1px solid #EADFC9;
 }
-.company-pending { font-size: 1rem; color: #5A4A8A; }
-.company-pending b { color: #E8A33D; font-size: 1.25rem; }
-.collect-btn { padding: 10px 18px; }
+.company-pending { font-size: 0.95rem; color: #5A3D05; }
+.company-pending b { color: #C8A24B; font-size: 1.2rem; }
+.collect-btn { padding: 9px 16px; background: linear-gradient(120deg,#D9B45A,#9A6B1E); border: none; }
 
 /* 升级 */
 .company-upgrade {
@@ -2784,99 +2819,103 @@ body::after {
   justify-content: space-between;
   gap: 12px;
   background: #fff;
-  border: 2px dashed #D9CCF5;
-  border-radius: 16px;
-  padding: 14px 18px;
-  margin-bottom: 18px;
+  border: 1.5px dashed #D9BC6E;
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
   transition: all 0.3s ease;
 }
 .company-upgrade.ready {
   border-style: solid;
-  border-color: #B79BF0;
-  background: linear-gradient(135deg, #FBF7FF 0%, #F1EAFF 100%);
-  box-shadow: 0 4px 14px rgba(155,126,222,0.18);
+  border-color: #C8A24B;
+  background: linear-gradient(120deg, #FFFBF0, #FFF7E2);
+  box-shadow: 0 4px 14px rgba(200,162,75,0.15);
 }
-.upgrade-info { display: flex; flex-direction: column; gap: 3px; }
-.upgrade-title { font-weight: 700; color: #6B4FB0; font-size: 1.05rem; }
-.upgrade-desc { font-size: 0.8rem; color: #9989C0; }
+.upgrade-info { display: flex; flex-direction: column; gap: 2px; }
+.upgrade-title { font-weight: 700; color: #9A6B1E; font-size: 1rem; }
+.upgrade-desc { font-size: 0.78rem; color: #A98B5A; }
 .upgrade-btn {
   border: none;
-  border-radius: 12px;
-  padding: 10px 18px;
-  font-size: 0.95rem;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 0.9rem;
   font-weight: 700;
   color: #fff;
-  background: #8B5CF6;
+  background: linear-gradient(120deg, #D9B45A, #9A6B1E);
   cursor: pointer;
   white-space: nowrap;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+  box-shadow: 0 3px 10px rgba(154,107,30,0.25);
 }
-.upgrade-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(139,92,246,0.4); }
+.upgrade-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 14px rgba(154,107,30,0.35); }
 .upgrade-btn:disabled {
-  background: #D6D0E4;
+  background: #D9D0BE;
   color: #fff;
   cursor: not-allowed;
   box-shadow: none;
 }
 
-/* 员工区 */
+/* 员工区 — 方案B紧凑全息收藏卡 */
 .company-section-title {
-  font-size: 1.1rem;
-  color: #6B4FB0;
-  margin: 4px 0 14px;
+  font-size: 1rem;
+  color: #9A6B1E;
+  margin: 2px 0 10px;
+  font-weight: 700;
 }
 .employee-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 .employee-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: calc(50% - 4px);
   background: #fff;
-  border: 2px solid #E6DEFF;
-  border-radius: 18px;
-  padding: 16px 14px 14px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  border-radius: 14px;
+  padding: 12px 8px 10px;
+  text-align: center;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
+  border: 2px solid #C8A24B;
   transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
-.employee-card:hover { transform: translateY(-3px); }
-/* 稀有度全息边框 */
-.employee-card.rarity-普通 { border-color: #E6DEFF; }
-.employee-card.rarity-稀有 { border-color: #5AA0E0; box-shadow: 0 4px 16px rgba(74,144,217,0.22); }
-.employee-card.rarity-史诗 { border-color: #B07BD8; box-shadow: 0 4px 18px rgba(155,89,182,0.28); }
-.employee-card.rarity-传说 { border-color: #F0A93A; box-shadow: 0 4px 22px rgba(243,156,18,0.34); }
-.employee-card.rarity-稀有:hover { box-shadow: 0 6px 22px rgba(74,144,217,0.34); }
-.employee-card.rarity-史诗:hover { box-shadow: 0 6px 24px rgba(155,89,182,0.4); }
-.employee-card.rarity-传说:hover { box-shadow: 0 6px 28px rgba(243,156,18,0.46); }
-/* 史诗/传说卡：缓慢流光 */
+.employee-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(154,107,30,0.15); }
+/* 稀有度边框 */
+.employee-card.rarity-普通 { border-color: #C8A24B; }
+.employee-card.rarity-稀有 { border-color: #7F77DD; box-shadow: 0 3px 12px rgba(127,119,221,0.18); }
+.employee-card.rarity-史诗 { border-color: #B07BD8; box-shadow: 0 4px 16px rgba(176,123,216,0.25); }
+.employee-card.rarity-传说 { border-color: #F0A93A; box-shadow: 0 4px 20px rgba(240,169,58,0.32); }
+/* 史诗/传说流光扫过 */
 .employee-card.rarity-史诗::after,
 .employee-card.rarity-传说::after {
   content: '';
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
+  top: -40%; left: -60%;
+  width: 50%; height: 180%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.65), transparent);
+  transform: rotate(20deg);
+  animation: holoShine 3s ease-in-out infinite;
   pointer-events: none;
-  background: linear-gradient(120deg, transparent 32%, rgba(255,255,255,0.55) 50%, transparent 68%);
-  background-size: 250% 100%;
-  animation: holoShine 3.5s ease-in-out infinite;
-  opacity: 0.7;
 }
-@keyframes holoShine { 0% { background-position: 130% 0; } 100% { background-position: -50% 0; } }
+@keyframes holoShine { 0%{left:-60%} 60%,100%{left:140%} }
 
+/* 宠物3D球体 — 方案B尺寸 */
 .employee-pet {
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   cursor: pointer;
+  display: inline-block;
+}
+/* 卡片内3D球体 */
+.employee-card .pet-3d-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .employee-card .pet-emoji-large {
-  font-size: 64px;
-  padding: 14px 22px;
-  line-height: 1.3;
+  font-size: 30px !important;
+  line-height: 1;
+  padding: 6px 10px !important;
+}
 }
 /* 点击弹跳反馈 */
 .employee-pet.tap-pop .pet-emoji-large {
@@ -2889,38 +2928,37 @@ body::after {
 }
 .job-prop {
   position: absolute;
-  top: -6px;
-  right: -10px;
-  font-size: 26px;
-  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+  top: -4px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
   z-index: 3;
 }
+/* 方案B：紧凑信息 */
 .employee-info { text-align: center; width: 100%; }
 .employee-name {
-  font-weight: 700;
-  color: #4A3A7A;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  font-weight: 800;
+  color: #3C3489;
+  font-size: 0.85rem;
+  margin-bottom: 2px;
 }
 .employee-stage {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  color: #8B7CC4;
-  background: #F0EBFB;
-  padding: 2px 8px;
-  border-radius: 8px;
+  color: #A98B5A;
+  background: #FFF7E2;
+  padding: 1px 6px;
+  border-radius: 6px;
+  margin-left: 4px;
 }
-.employee-job { margin: 6px 0 4px; }
+.employee-job { margin: 2px 0; }
 .job-badge {
   display: inline-block;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: #fff;
-  padding: 3px 10px;
-  border-radius: 10px;
+  padding: 2px 8px;
+  border-radius: 8px;
 }
 .job-badge.act-chef { background: #FF8C42; }
 .job-badge.act-guard { background: #4A90D9; }
@@ -2928,46 +2966,45 @@ body::after {
 .job-badge.act-courier { background: #2BB673; }
 .job-badge.act-cleaner { background: #17B0A7; }
 .employee-action-text {
-  font-size: 0.78rem;
-  color: #9989C0;
-  min-height: 18px;
-  margin-bottom: 6px;
+  font-size: 0.7rem;
+  color: #A98B5A;
+  min-height: 14px;
+  margin-bottom: 2px;
 }
 .employee-wage {
-  font-size: 0.82rem;
-  color: #5A4A8A;
-  background: #F7F4FC;
-  border-radius: 10px;
-  padding: 5px 8px;
+  font-size: 0.72rem;
+  color: #7A6B3A;
+  margin-bottom: 4px;
 }
-.employee-wage b { color: #E8A33D; }
+.employee-wage b { color: #C8A24B; }
 .employee-off-btn {
-  margin-top: 10px;
-  border: 1.5px solid #E0D4FF;
+  margin-top: 4px;
+  border: 1px solid #D9BC6E;
   background: #fff;
-  color: #8B7CC4;
-  border-radius: 10px;
-  padding: 5px 14px;
-  font-size: 0.82rem;
+  color: #9A6B1E;
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-weight: 600;
 }
-.employee-off-btn:hover { background: #F3EFFE; color: #6B4FB0; }
+.employee-off-btn:hover { background: #9A6B1E; color: #fff; }
 
 /* 点击工作中的宠物：气泡 + 闪光反馈（挂在 body 上，避免被卡片裁切） */
 .pet-feedback-bubble {
   position: fixed;
   transform: translate(-50%, -50%);
-  background: linear-gradient(120deg, #8B5CF6, #6B4FB0);
+  background: linear-gradient(120deg, #D9B45A, #9A6B1E);
   color: #fff;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  padding: 6px 12px;
-  border-radius: 12px;
+  padding: 5px 11px;
+  border-radius: 10px;
   white-space: nowrap;
   pointer-events: none;
   z-index: 9999;
-  box-shadow: 0 4px 12px rgba(107,79,176,0.3);
+  box-shadow: 0 3px 10px rgba(154,107,30,0.3);
   animation: feedbackBubble 1s ease-out forwards;
 }
 @keyframes feedbackBubble {
@@ -2990,15 +3027,14 @@ body::after {
 }
 
 .company-no-employee {
-  grid-column: 1 / -1;
   text-align: center;
-  color: #9989C0;
-  font-size: 0.95rem;
-  padding: 30px 10px;
+  color: #A98B5A;
+  font-size: 0.9rem;
+  padding: 24px 10px;
   line-height: 1.8;
-  background: #FBFAFE;
-  border-radius: 16px;
-  border: 1px dashed #E0D4FF;
+  background: #FFFBF0;
+  border-radius: 14px;
+  border: 1.5px dashed #D9BC6E;
 }
 
 /* 岗位动作动画 */
@@ -5700,7 +5736,7 @@ function renderCompany() {
           <div class="employee-name">${getPetDisplayName(pid)} <span class="employee-stage">${stage}</span></div>
           <div class="employee-job"><span class="job-badge act-${job.action}">${job.emoji} ${job.name}</span></div>
           <div class="employee-action-text">${jobActionText(job.action)}</div>
-          <div class="employee-wage">时薪 <b>${wagePerHour}</b> 🪙 · 已累计 <b id="pending-${pid}">${pendingEarnings(pid)}</b> 🪙</div>
+          <div class="employee-wage">时薪 <b>${wagePerHour}</b> · 累计 <b id="pending-${pid}">${pendingEarnings(pid)}</b></div>
         </div>
         <button class="employee-off-btn" onclick="offWorkPet('${pid}')">下班</button>
       </div>`;
@@ -5728,15 +5764,18 @@ function renderCompany() {
         <div class="company-hq-name">
           <span id="company-name-text">${comp.name}</span>
           <span class="company-en">MAOKIDS PET CO.</span>
+          <span class="b-lv-badge">★ Lv.${comp.level}</span>
           <button class="company-rename-btn" onclick="openRenameCompanyModal()" title="给公司改名">✏️ 改名</button>
         </div>
-        <div class="company-hq-level">等级 Lv.${comp.level} · 工资倍率 ×${comp.level}</div>
-        <div class="company-hq-stats">
-          <span>👥 在职 ${employeeIds.length} 只</span>
-          <span>🌟 成年宠物 ${adultCount} 只</span>
-          <span>💰 累计营收 ${comp.totalEarned || 0} 🪙</span>
-        </div>
+        <div class="company-hq-level">工资倍率 ×${comp.level}</div>
       </div>
+    </div>
+
+    <!-- 方案B：成就环形统计 -->
+    <div class="ringrow">
+      <div class="ring"><b>${employeeIds.length}</b><span>在职</span></div>
+      <div class="ring"><b>×${comp.level}</b><span>工资倍率</span></div>
+      <div class="ring"><b>${comp.totalEarned || 0}</b><span>累计营收</span></div>
     </div>
 
     <div class="company-toolbar">
