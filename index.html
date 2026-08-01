@@ -3153,19 +3153,27 @@ body::after {
   border: 1px dashed #E0D4FF;
 }
 
-/* 宠物公司响应式 */
+/* 宠物公司响应式 — 方案B适配 */
 @media (max-width: 600px) {
-  .company-hq { flex-direction: column; text-align: center; gap: 10px; }
-  .company-hq-stats { justify-content: center; }
+  .company-hq { gap: 10px; padding: 12px 14px; }
+  .company-logo { flex: 0 0 52px; }
+  .company-logo svg { width: 48px; height: 48px; }
+  .company-hq-name { font-size: 1rem; }
+  .b-lv-badge { font-size: 0.65rem; padding: 3px 8px; }
+  .ringrow { gap: 6px; }
+  .ring { padding: 6px 8px; }
+  .ring b { font-size: 15px; }
   .company-toolbar { flex-direction: column; align-items: stretch; }
   .company-toolbar .collect-btn { width: 100%; }
   .company-upgrade { flex-direction: column; align-items: stretch; }
   .company-upgrade .upgrade-btn { width: 100%; }
-  .employee-grid { grid-template-columns: 1fr 1fr; }
+  .employee-grid { gap: 6px; }
+  .employee-card .pet-emoji-large { font-size: 26px !important; padding: 4px 8px !important; }
   .dispatch-jobs { grid-template-columns: 1fr 1fr 1fr; }
 }
 @media (max-width: 380px) {
-  .employee-grid { grid-template-columns: 1fr; }
+  .employee-card { width: 100%; }
+  .b-name { font-size: 0.95rem; }
 }
 
 </style>
