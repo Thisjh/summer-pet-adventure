@@ -2898,7 +2898,7 @@ const PETS = [
   { id: 'p7', name: '九天仙鹤', emoji: '🕊️', price: 55, desc: '九天之上的仙鹤，仙气飘飘守护平安', rarity: '史诗' },
   { id: 'p8', name: '小火龙', emoji: '🐉', price: 50, desc: '会喷小火苗的小龙，尾巴会发光', rarity: '稀有' },
   { id: 'p9', name: '独角兽', emoji: '🦄', price: 65, desc: '彩虹独角兽，会施展魔法', rarity: '史诗' },
-  { id: 'p10', name: '不死鸟', emoji: '🕯️', price: 80, desc: '浴火重生永恒不灭，光芒照耀九重天', rarity: '传说' },
+  { id: 'p10', name: '不死鸟', emoji: '🦅', price: 80, desc: '浴火重生永恒不灭，光芒照耀九重天', rarity: '传说' },
   { id: 'p11', name: '星精灵', emoji: '⭐', price: 60, desc: '从星星里诞生的精灵，会许愿', rarity: '史诗' },
   { id: 'p12', name: '小企鹅', emoji: '🐧', price: 30, desc: '南极来的小企鹅，爱滑冰', rarity: '普通' },
   { id: 'p13', name: '皮卡丘', emoji: '⚡', price: 70, desc: '十万伏特的萌神，脸颊红扑扑', rarity: '史��' },
@@ -2971,15 +2971,15 @@ const PET_GROWTH = {
   // 蝴蝶类
   'p1': { baby: '🥚', young: '🐛', adult: '🦋', babyHours: 24, youngHours: 72 },
   // 猫狗
-  'p2': { baby: '🐣', young: '🐥', adult: '🐱', babyHours: 24, youngHours: 72 },
-  'p3': { baby: '🐣', young: '🐥', adult: '🐶', babyHours: 24, youngHours: 72 },
+  'p2': { baby: '🐣', young: '🐈', adult: '🐱', babyHours: 24, youngHours: 72 },
+  'p3': { baby: '🐣', young: '🐕', adult: '🐶', babyHours: 24, youngHours: 72 },
   // 兔子
   'p4': { baby: '🥚', young: '🐇', adult: '🐰', babyHours: 24, youngHours: 72 },
   // 恐龙
   'p5': { baby: '🥚', young: '🦎', adult: '🦕', babyHours: 30, youngHours: 80 },
   // 金翅大鹏 / 九天仙鹤 (天上的神兽)
   'p6': { baby: '🥚', young: '🐤', adult: '🦅', babyHours: 30, youngHours: 80 },
-  'p7': { baby: '✨', young: '🕊️', adult: '🌸', babyHours: 36, youngHours: 84 },
+  'p7': { baby: '✨', young: '🕊️', adult: '🦢', babyHours: 36, youngHours: 84 },
   // 龙/凤凰
   'p8': { baby: '🥚', young: '🐍', adult: '🐉', babyHours: 36, youngHours: 84 },
   'p10':{ baby: '🕯️', young: '🔥', adult: '🦅', babyHours: 48, youngHours: 96 },  // 不死鸟：烛光→火焰→凤凰
@@ -2999,15 +2999,15 @@ const PET_GROWTH = {
   // 熊猫
   'p16':{ baby: '🐣', young: '🧸', adult: '🐼', babyHours: 30, youngHours: 78 },
   // 老虎
-  'p17':{ baby: '🐣', young: '🐱', adult: '🐯', babyHours: 30, youngHours: 78 },
+  'p17':{ baby: '🐣', young: '🐯', adult: '🐯', babyHours: 30, youngHours: 78 },
   // 水精灵
   'p18':{ baby: '💧', young: '🌊', adult: '🧜', babyHours: 30, youngHours: 78 },
   // 狐狸
-  'p19':{ baby: '🐣', young: '🐺', adult: '🦊', babyHours: 24, youngHours: 72 },
+  'p19':{ baby: '🐣', young: '🦊', adult: '🦊', babyHours: 24, youngHours: 72 },
   // ===== 飞禽 =====
   'p21':{ baby: '🥚', young: '🐤', adult: '🦜', babyHours: 20, youngHours: 60 },
   'p22':{ baby: '🥚', young: '🐤', adult: '🦉', babyHours: 28, youngHours: 72 },
-  'p23':{ baby: '🐣', young: '🐭', adult: '🦝', babyHours: 22, youngHours: 64 },  // 小浣熊
+  'p23':{ baby: '🐣', young: '🦝', adult: '🦝', babyHours: 22, youngHours: 64 },  // 小浣熊
   'p24':{ baby: '🥚', young: '🐤', adult: '🦚', babyHours: 36, youngHours: 84 },
   'p25':{ baby: '🥚', young: '🐤', adult: '🦢', babyHours: 28, youngHours: 72 },
   'p26':{ baby: '🥚', young: '🐤', adult: '🦩', babyHours: 28, youngHours: 72 },
@@ -3015,8 +3015,8 @@ const PET_GROWTH = {
   'p28':{ baby: '🥚', young: '🦎', adult: '🦇', babyHours: 24, youngHours: 72 },  // 蝙蝠
   'p30':{ baby: '🐣', young: '🦨', adult: '🦡', babyHours: 30, youngHours: 78 },  // 蜜獾平头哥
   // ===== 走兽 =====
-  'p31':{ baby: '🐣', young: '🐱', adult: '🦁', babyHours: 30, youngHours: 78 },
-  'p32':{ baby: '🐣', young: '🐐', adult: '🦌', babyHours: 24, youngHours: 72 },
+  'p31':{ baby: '🐣', young: '🦁', adult: '🦁', babyHours: 30, youngHours: 78 },
+  'p32':{ baby: '🐣', young: '🦌', adult: '🦌', babyHours: 24, youngHours: 72 },
   'p33':{ baby: '🐣', young: '🙈', adult: '🐵', babyHours: 22, youngHours: 64 },
   'p34':{ baby: '🥚', young: '🦎', adult: '🐊', babyHours: 30, youngHours: 78 },
   'p35':{ baby: '🐣', young: '🐴', adult: '🐴', babyHours: 26, youngHours: 72 },
@@ -3028,17 +3028,17 @@ const PET_GROWTH = {
   'p41':{ baby: '🐣', young: '🐶', adult: '🐺', babyHours: 28, youngHours: 78 },
   'p42':{ baby: '🐣', young: '🐴', adult: '🦓', babyHours: 24, youngHours: 72 },
   'p43':{ baby: '🐣', young: '🦒', adult: '🦒', babyHours: 30, youngHours: 80 },
-  'p44':{ baby: '✨', young: '🐏', adult: '🐐', babyHours: 48, youngHours: 108 }, // 白泽
+  'p44':{ baby: '✨', young: '🐐', adult: '🐏', babyHours: 48, youngHours: 108 }, // 白泽
   // ===== 水族 =====
   'p45':{ baby: '🥚', young: '🐟', adult: '🦈', babyHours: 24, youngHours: 72 },
   'p46':{ baby: '🥚', young: '🦐', adult: '🐙', babyHours: 24, youngHours: 68 },
   'p47':{ baby: '🥚', young: '🐟', adult: '🐡', babyHours: 22, youngHours: 64 },
   'p48':{ baby: '🥚', young: '🦭', adult: '🦭', babyHours: 22, youngHours: 64 },
   'p49':{ baby: '💧', young: '🪼', adult: '🪼', babyHours: 24, youngHours: 70 },
-  'p50':{ baby: '🥚', young: '🐠', adult: '🐟', babyHours: 28, youngHours: 78 },
+  'p50':{ baby: '🥚', young: '🐟', adult: '🐠', babyHours: 28, youngHours: 78 },
   'p51':{ baby: '💧', young: '🐬', adult: '🐋', babyHours: 36, youngHours: 84 },
   'p52':{ baby: '💧', young: '🧜', adult: '🧜', babyHours: 40, youngHours: 96 },
-  'p53':{ baby: '🥚', young: '🐊', adult: '🐳', babyHours: 48, youngHours: 108 },
+  'p53':{ baby: '🥚', young: '🐊', adult: '🐊', babyHours: 48, youngHours: 108 },
   'p54':{ baby: '🥚', young: '🐙', adult: '🦑', babyHours: 54, youngHours: 120 },
   // ===== 蛋仔派对 =====
   'p55':{ baby: '🥚', young: '🍳', adult: '🎀', babyHours: 24, youngHours: 72,
