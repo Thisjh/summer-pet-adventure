@@ -3747,6 +3747,8 @@ const MATH_REVIEW = [
   { id: 'm_r_11', title: '数据收集整理', type: 'quiz', desc: '统计表和简单数据' },
   { id: 'm_r_12', title: '对称图形', type: 'quiz', desc: '轴对称图形的认识' },
   { id: 'm_r_13', title: '认识万以内数', type: 'flashcard', desc: '千位、百位的读写和比较' },
+  { id: 'm_r_14', title: '乘法口诀口算', type: 'practice', desc: '九九乘法表快速计算' },
+  { id: 'm_r_15', title: '表内除法口算', type: 'practice', desc: '用乘法口诀求商' },
 ];
 
 const MATH_PREVIEW = [
@@ -3870,16 +3872,44 @@ const LEARNING_DATA = {
 
 // ========== 闪卡内容 ==========
 const FLASHCARDS = {
-  // 乘法口诀
+  // 乘法口诀（完整九九表）
   'm_r_2': [
+    { front: '2 × 2 = ?', back: '4' },
     { front: '2 × 3 = ?', back: '6' },
-    { front: '4 × 5 = ?', back: '20' },
-    { front: '6 × 7 = ?', back: '42' },
-    { front: '8 × 9 = ?', back: '72' },
+    { front: '2 × 4 = ?', back: '8' },
+    { front: '2 × 5 = ?', back: '10' },
+    { front: '2 × 6 = ?', back: '12' },
+    { front: '2 × 7 = ?', back: '14' },
+    { front: '2 × 8 = ?', back: '16' },
+    { front: '2 × 9 = ?', back: '18' },
+    { front: '3 × 3 = ?', back: '9' },
+    { front: '3 × 4 = ?', back: '12' },
+    { front: '3 × 5 = ?', back: '15' },
+    { front: '3 × 6 = ?', back: '18' },
+    { front: '3 × 7 = ?', back: '21' },
     { front: '3 × 8 = ?', back: '24' },
-    { front: '7 × 7 = ?', back: '49' },
-    { front: '9 × 9 = ?', back: '81' },
+    { front: '3 × 9 = ?', back: '27' },
+    { front: '4 × 4 = ?', back: '16' },
+    { front: '4 × 5 = ?', back: '20' },
+    { front: '4 × 6 = ?', back: '24' },
+    { front: '4 × 7 = ?', back: '28' },
+    { front: '4 × 8 = ?', back: '32' },
+    { front: '4 × 9 = ?', back: '36' },
+    { front: '5 × 5 = ?', back: '25' },
     { front: '5 × 6 = ?', back: '30' },
+    { front: '5 × 7 = ?', back: '35' },
+    { front: '5 × 8 = ?', back: '40' },
+    { front: '5 × 9 = ?', back: '45' },
+    { front: '6 × 6 = ?', back: '36' },
+    { front: '6 × 7 = ?', back: '42' },
+    { front: '6 × 8 = ?', back: '48' },
+    { front: '6 × 9 = ?', back: '54' },
+    { front: '7 × 7 = ?', back: '49' },
+    { front: '7 × 8 = ?', back: '56' },
+    { front: '7 × 9 = ?', back: '63' },
+    { front: '8 × 8 = ?', back: '64' },
+    { front: '8 × 9 = ?', back: '72' },
+    { front: '9 × 9 = ?', back: '81' },
   ],
   // 分数初步
   'm_p_2': [
@@ -4792,6 +4822,21 @@ function generateMathProblems(type) {
         const result = Math.floor(Math.random() * 20) + 5;
         const a = b * result;
         problems.push({ q: `${a} ÷ ${b} = ?`, answer: result, hint: '列竖式计算：从高位除起' });
+      }
+      break;
+    case 'm_r_14': // 乘法口诀口算（表内乘法 1-9）
+      for (let i = 0; i < 10; i++) {
+        const a = Math.floor(Math.random() * 9) + 1;
+        const b = Math.floor(Math.random() * 9) + 1;
+        problems.push({ q: `${a} × ${b} = ?`, answer: a * b });
+      }
+      break;
+    case 'm_r_15': // 表内除法口算（用乘法口诀求商）
+      for (let i = 0; i < 10; i++) {
+        const b = Math.floor(Math.random() * 8) + 2;        // 除数 2-9
+        const result = Math.floor(Math.random() * 9) + 1;   // 商 1-9
+        const a = b * result;
+        problems.push({ q: `${a} ÷ ${b} = ?`, answer: result, hint: `想：（）× ${b} = ${a}` });
       }
       break;
     case 'm_r_5': // 二年级应用题
