@@ -3270,6 +3270,175 @@ body::after {
   .b-name { font-size: 0.95rem; }
 }
 
+/* ===== 幸运扭蛋 + 储蓄罐 ===== */
+.gacha-machine {
+  background: linear-gradient(160deg, #FFF7E6 0%, #FFE9C7 100%);
+  border-radius: var(--radius-lg);
+  padding: 22px 18px 18px;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 18px;
+}
+.gacha-stage {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 14px;
+  background: radial-gradient(circle at 50% 35%, #FFD98A 0%, #F6B44A 70%, #E0922E 100%);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 -8px 18px rgba(180,110,20,0.35), var(--shadow-md);
+  overflow: hidden;
+}
+.gacha-ball-pit {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gacha-machine-top { font-size: 40px; line-height: 1; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
+.gacha-coin-slot {
+  margin-top: 6px;
+  background: rgba(255,255,255,0.85);
+  color: #8a5a12;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+.gacha-actions { margin-bottom: 14px; }
+.gacha-draw-btn { font-size: 18px; padding: 14px 34px; }
+.gacha-limit { margin-top: 8px; font-size: 13px; color: #8a5a12; }
+.gacha-shard-box {
+  background: rgba(255,255,255,0.7);
+  border-radius: var(--radius-md);
+  padding: 12px;
+}
+.gacha-shard-count { font-weight: bold; color: #6b4a12; margin-bottom: 8px; }
+.gacha-shard-bar, .savings-progress-bar {
+  height: 12px;
+  background: #EADBC0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.gacha-shard-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5BA8F0, #8E5BF0);
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+.savings-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFB347, #FF7EB3);
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+.gacha-tip { font-size: 12px; color: #9a6b1e; margin-top: 10px; line-height: 1.5; }
+
+/* 扭蛋球动画 */
+.gacha-ball {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0%, #FF9AA2 45%, #FF6F91 100%);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+  position: relative;
+  z-index: 3;
+}
+.gacha-ball::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; height: 50%;
+  background: rgba(255,255,255,0.55);
+  border-radius: 56px 56px 0 0;
+}
+.gacha-ball.rolling { animation: gachaRoll 0.85s ease; }
+@keyframes gachaRoll {
+  0% { transform: translateY(-130px) rotate(0deg); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(0) rotate(720deg); opacity: 1; }
+}
+.gacha-reveal {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  z-index: 4;
+  animation: revealPop 0.4s ease;
+}
+.gacha-reveal-emoji { font-size: 40px; }
+.gacha-reveal b { font-size: 13px; color: #6b4a12; white-space: nowrap; }
+.gacha-reveal.rare .gacha-reveal-emoji { animation: rareGlow 1s ease infinite alternate; }
+.gacha-reveal.rare b { color: #8E5BF0; }
+@keyframes revealPop {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+@keyframes rareGlow {
+  from { text-shadow: 0 0 4px #FFD98A; }
+  to { text-shadow: 0 0 14px #FF9F43; }
+}
+
+/* 储蓄罐 */
+.savings-box {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.savings-box h3 { margin-bottom: 12px; }
+.savings-set, .savings-deposit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.savings-input {
+  width: 110px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+}
+.savings-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-soft);
+  margin-bottom: 12px;
+}
+.savings-stats b { color: var(--primary); }
+.savings-redeem { width: 100%; margin-top: 4px; }
+
+/* 公司每日封顶提示 */
+.company-cap-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-soft);
+  background: var(--bg-soft);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  margin: 10px 0 4px;
+}
+.company-cap-note b { color: #B8860B; }
+
+@media (max-width: 600px) {
+  .gacha-stage { width: 140px; height: 140px; }
+  .gacha-draw-btn { width: 100%; }
+  .savings-input { width: 100%; }
+}
+
 </style>
 </head>
 <body>
@@ -3318,6 +3487,10 @@ body::after {
     <button class="tab-btn" data-tab="company">
       <span class="tab-icon">🏢</span>
       <span class="tab-label">宠物公司</span>
+    </button>
+    <button class="tab-btn" data-tab="gacha">
+      <span class="tab-icon">🎰</span>
+      <span class="tab-label">幸运扭蛋</span>
     </button>
     <button class="tab-btn" data-tab="learn">
       <span class="tab-icon">📚</span>
@@ -3406,6 +3579,13 @@ body::after {
     <!-- ===== 宠物公司 ===== -->
     <section class="tab-panel" id="panel-company">
       <div id="company-content">
+        <!-- 由JS生成 -->
+      </div>
+    </section>
+
+    <!-- ===== 幸运扭蛋 ===== -->
+    <section class="tab-panel" id="panel-gacha">
+      <div id="gacha-content">
         <!-- 由JS生成 -->
       </div>
     </section>
@@ -3582,6 +3762,8 @@ const PETS = [
   { id: 'p60', name: '冰霜精灵', emoji: '❄️', price: 55, desc: '冰雪世界的使者，指尖凝结冰霜', rarity: '史诗' },
   { id: 'p61', name: '暗影幽灵', emoji: '👻', price: 60, desc: '月下暗影，来去无踪的神秘灵体', rarity: '史诗' },
   { id: 'p62', name: '小树精', emoji: '🌳', price: 35, desc: '森林里的树精灵，会讲古老的故事', rarity: '稀有' },
+  // ===== 扭蛋机专属（仅可兑换，不在商店出售） =====
+  { id: 'p63', name: '九天神兽', emoji: '🦖', price: 0, redeemOnly: true, desc: '集齐10枚神兽碎片召唤的九天神兽，瑞气千条威震四方', rarity: '传说' },
 ];
 
 const RARITY_CONFIG = {
@@ -3730,6 +3912,22 @@ const PET_FOODS = [
   { id: 'f33', name: '蜂蜜柠檬茶', emoji: '🍋', price: 4, hunger: 12, happiness: 15, energy: 25, desc: '清爽提神，恢复元气' },
   { id: 'f34', name: '魔法果汁', emoji: '🧉', price: 5, hunger: 10, happiness: 18, energy: 35, desc: '神奇配方，瞬间回能' },
   { id: 'f35', name: '元气包子', emoji: '🥮', price: 4, hunger: 25, happiness: 8, energy: 20, desc: '热腾腾的包子，吃饱有力气' },
+];
+
+// ========== 扭蛋机配置 ==========
+const GACHA_COST = 30;            // 每次扭蛋花费
+const GACHA_DAILY_LIMIT = 10;     // 每日最多扭蛋次数（防沉迷）
+const GACHA_SHARD_REDEEM = 10;    // 集齐多少神兽碎片兑换传说神兽
+// 扭蛋奖池（weight 为权重，每次必中一项）
+const GACHA_LOOT = [
+  { type: 'food', id: 'f1',  weight: 18 },
+  { type: 'food', id: 'f2',  weight: 16 },
+  { type: 'food', id: 'f3',  weight: 12 },
+  { type: 'food', id: 'f5',  weight: 10 },
+  { type: 'food', id: 'f6',  weight: 8  },
+  { type: 'food', id: 'f8',  weight: 6  },
+  { type: 'food', id: 'f21', weight: 4  },
+  { type: 'shard',           weight: 12 },
 ];
 
 // ========== 学习内容 - 数学 ==========
@@ -4898,6 +5096,17 @@ let state = {
     level: 1,              // 公司等级（工资倍率）
     totalEarned: 0,        // 公司累计营收
     employees: {},         // { petId: { job: 'chef', lastEarn: 时间戳 } }
+    dailyKey: null,        // 公司工资每日封顶日期标记
+    dailyEarned: 0,        // 今日已从公司领取的工资
+  },
+  gacha: {
+    shards: 0,             // 神兽碎片数量
+    todayDraws: 0,         // 今日已扭蛋次数
+    dailyKey: null,        // 日期标记（用于重置每日次数）
+  },
+  savings: {
+    goal: 0,               // 储蓄目标
+    saved: 0,              // 已存入储蓄罐（锁定，不可其他消费）
   },
 };
 
@@ -4954,6 +5163,10 @@ function loadState() {
     if (!state.company) state.company = { name: '毛孩子有限公司', level: 1, totalEarned: 0, employees: {} };
     if (!state.company.employees) state.company.employees = {};
     if (!state.company.name) state.company.name = '毛孩子有限公司';
+    if (state.company.dailyKey === undefined) state.company.dailyKey = null;
+    if (state.company.dailyEarned === undefined) state.company.dailyEarned = 0;
+    if (!state.gacha) state.gacha = { shards: 0, todayDraws: 0, dailyKey: null };
+    if (!state.savings) state.savings = { goal: 0, saved: 0 };
   } catch (e) {
     console.error('加载失败:', e);
   }
@@ -5932,6 +6145,7 @@ function renderCompany() {
       <div class="company-pending">🪙 待领取工资：<b id="company-pending-total">${pending}</b></div>
       <button class="btn-primary collect-btn" onclick="collectSalary()">💰 一键领工资</button>
     </div>
+    <div class="company-cap-note">📅 今日公司工资已领 <b id="company-daily-earned">${comp.dailyEarned || 0}</b> / ${COMPANY_DAILY_CAP} 金（每日封顶）</div>
 
     <div class="company-upgrade ${canUpgrade ? 'ready' : ''}">
       <div class="upgrade-info">
@@ -6006,10 +6220,17 @@ function dispatchAssign(petId) {
   renderCompany();
 }
 
+// 公司每日工资封顶，防止金币通胀
+const COMPANY_DAILY_CAP = 500;
+
 // 一键领工资（离线累计，封顶12小时；上班消耗体力，体力耗尽自动下班）
 function collectSalary() {
   const comp = state.company;
   const now = Date.now();
+  // 每日封顶重置
+  const todayKey = todayStr();
+  if (comp.dailyKey !== todayKey) { comp.dailyKey = todayKey; comp.dailyEarned = 0; }
+
   let total = 0;
   const toRemove = [];
   Object.keys(comp.employees).forEach(petId => {
@@ -6027,15 +6248,29 @@ function collectSalary() {
     emp.lastEarn = now;
   });
   toRemove.forEach(id => delete comp.employees[id]);
-  if (total > 0) {
-    addCoins(total);
-    comp.totalEarned = (comp.totalEarned || 0) + total;
-    saveState();
-    showToast(`💰 领取了 ${total} 金币工资！`, 'success');
-    launchConfetti();
-  } else {
+
+  if (total <= 0) {
     showToast('暂时还没有可领取的工资哦~', 'info');
+    renderCompany();
+    return;
   }
+  const remaining = COMPANY_DAILY_CAP - (comp.dailyEarned || 0);
+  if (remaining <= 0) {
+    showToast(`今日公司工资已封顶（${COMPANY_DAILY_CAP}金），多上的班算做贡献啦，明天再来领~`, 'info');
+    renderCompany();
+    return;
+  }
+  const give = Math.min(total, remaining);
+  addCoins(give);
+  comp.totalEarned = (comp.totalEarned || 0) + give;
+  comp.dailyEarned = (comp.dailyEarned || 0) + give;
+  saveState();
+  if (give < total) {
+    showToast(`💰 领取了 ${give} 金（今日封顶${COMPANY_DAILY_CAP}金，余下算加班贡献）`, 'success');
+  } else {
+    showToast(`💰 领取了 ${give} 金币工资！`, 'success');
+  }
+  launchConfetti();
   renderCompany();
 }
 
@@ -6153,6 +6388,7 @@ function renderShop() {
   if (currentShopTab === 'pets') {
     let html = '<div class="shop-grid">';
     PETS.forEach(pet => {
+      if (pet.redeemOnly) return;
       const owned = state.pets.includes(pet.id);
       const canBuy = state.coins >= pet.price && !owned;
       const rarityCfg = RARITY_CONFIG[pet.rarity] || RARITY_CONFIG['普通'];
@@ -6235,6 +6471,196 @@ function buyFood(foodId) {
   updateCoinDisplay();
   renderShop();
   showToast(`购买了 ${food.emoji} ${food.name}！`, 'success');
+}
+
+// ==================== 扭蛋机 + 储蓄罐 ====================
+function renderGacha() {
+  const panel = document.getElementById('gacha-content');
+  if (!panel) return;
+  const todayKey = todayStr();
+  if (state.gacha.dailyKey !== todayKey) { state.gacha.dailyKey = todayKey; state.gacha.todayDraws = 0; }
+  const drawsLeft = Math.max(0, GACHA_DAILY_LIMIT - state.gacha.todayDraws);
+  const shards = state.gacha.shards || 0;
+  const canRedeem = shards >= GACHA_SHARD_REDEEM;
+  const s = state.savings;
+  const goal = s.goal || 0;
+  const saved = s.saved || 0;
+  const pct = goal > 0 ? Math.min(100, Math.round(saved / goal * 100)) : 0;
+  const canRedeemSav = goal > 0 && saved >= goal;
+
+  panel.innerHTML = `
+    <div class="panel-header">
+      <h2>🎰 幸运扭蛋</h2>
+      <p class="panel-subtitle">花金币抽惊喜，集碎片召唤传说神兽，存钱养好习惯！</p>
+    </div>
+
+    <div class="gacha-machine">
+      <div class="gacha-stage">
+        <div class="gacha-ball-pit" id="gacha-ball-pit"></div>
+        <div class="gacha-machine-top">🎰</div>
+        <div class="gacha-coin-slot">每次 ${GACHA_COST} 🪙</div>
+      </div>
+      <div class="gacha-actions">
+        <button class="btn-primary gacha-draw-btn" onclick="drawCapsule()" ${drawsLeft <= 0 ? 'disabled' : ''}>
+          🎯 扭一次！(${GACHA_COST}🪙)
+        </button>
+        <div class="gacha-limit">今日剩余次数：${drawsLeft} / ${GACHA_DAILY_LIMIT}</div>
+      </div>
+      <div class="gacha-shard-box">
+        <div class="gacha-shard-count">🔷 神兽碎片：${shards} / ${GACHA_SHARD_REDEEM}</div>
+        <div class="gacha-shard-bar"><div class="gacha-shard-fill" style="width:${Math.min(100, shards / GACHA_SHARD_REDEEM * 100)}%"></div></div>
+        <button class="btn-secondary" onclick="redeemLegendary()" ${canRedeem ? '' : 'disabled'}>
+          ${canRedeem ? '✨ 召唤传说神兽' : '集齐碎片可召唤'}
+        </button>
+      </div>
+      <p class="gacha-tip">💡 扭蛋必中奖励：宠物粮 或 神兽碎片（集齐召唤九天神兽）</p>
+    </div>
+
+    <div class="savings-box">
+      <h3>🐷 我的成长储蓄罐</h3>
+      <div class="savings-set">
+        <span>储蓄目标：</span>
+        <input type="number" id="savings-goal-input" class="savings-input" value="${goal}" min="1" placeholder="如 300">
+        <button class="btn-secondary" onclick="setSavingsGoal()">设定</button>
+      </div>
+      <div class="savings-progress-bar">
+        <div class="savings-progress-fill" style="width:${pct}%"></div>
+      </div>
+      <div class="savings-stats">
+        <span>已存 <b>${saved}</b> 金（已锁定，不可花）</span>
+        <span>${goal > 0 ? pct + '%' : '未设目标'}</span>
+      </div>
+      <div class="savings-deposit">
+        <input type="number" id="savings-deposit-input" class="savings-input" min="1" placeholder="存入金额">
+        <button class="btn-primary" onclick="depositSavings()">存入储蓄罐</button>
+      </div>
+      <button class="btn-secondary savings-redeem" onclick="redeemSavings()" ${canRedeemSav ? '' : 'disabled'}>
+        ${canRedeemSav ? '🎁 达成！领取传说神兽奖励' : '存够目标可领取奖励'}
+      </button>
+      <p class="gacha-tip">💡 把金币存进储蓄罐，攒够目标就能解锁一只传说神兽！</p>
+    </div>
+  `;
+}
+
+function pickGachaLoot() {
+  const total = GACHA_LOOT.reduce((sum, l) => sum + l.weight, 0);
+  let r = Math.random() * total;
+  for (const l of GACHA_LOOT) {
+    if (r < l.weight) return l;
+    r -= l.weight;
+  }
+  return GACHA_LOOT[0];
+}
+
+function drawCapsule() {
+  if (window._gachaBusy) return;
+  const todayKey = todayStr();
+  if (state.gacha.dailyKey !== todayKey) { state.gacha.dailyKey = todayKey; state.gacha.todayDraws = 0; }
+  if (state.gacha.todayDraws >= GACHA_DAILY_LIMIT) { showToast('今天扭蛋次数用完啦，明天再来~', 'info'); return; }
+  if (state.coins < GACHA_COST) { showToast('金币不够啦，先去赚一点~', 'warning'); return; }
+
+  window._gachaBusy = true;
+  state.coins -= GACHA_COST;
+  state.gacha.todayDraws += 1;
+  updateCoinDisplay();
+
+  const pick = pickGachaLoot();
+  const pit = document.getElementById('gacha-ball-pit');
+  const ball = document.createElement('div');
+  ball.className = 'gacha-ball rolling';
+  pit.appendChild(ball);
+
+  setTimeout(() => {
+    ball.classList.add('open');
+    const food = pick.type === 'food' ? PET_FOODS.find(f => f.id === pick.id) : null;
+    const reveal = document.createElement('div');
+    reveal.className = 'gacha-reveal' + (pick.type === 'shard' || pick.id === 'f21' ? ' rare' : '');
+    reveal.innerHTML = pick.type === 'shard'
+      ? `<span class="gacha-reveal-emoji">🔷</span><b>神兽碎片 +1</b>`
+      : `<span class="gacha-reveal-emoji">${food.emoji}</span><b>${food.name}</b>`;
+    pit.appendChild(reveal);
+    applyGachaReward(pick);
+    if (pick.type === 'shard' || pick.id === 'f21') launchConfetti();
+    setTimeout(() => {
+      ball.remove();
+      reveal.remove();
+      window._gachaBusy = false;
+      renderGacha();
+    }, 1500);
+  }, 850);
+}
+
+function applyGachaReward(pick) {
+  if (pick.type === 'shard') {
+    state.gacha.shards += 1;
+    showToast(`🎉 获得神兽碎片！集齐 ${GACHA_SHARD_REDEEM} 枚召唤传说神兽`, 'success');
+  } else {
+    const food = PET_FOODS.find(f => f.id === pick.id);
+    state.foodInventory[pick.id] = (state.foodInventory[pick.id] || 0) + 1;
+    showToast(`获得 ${food.emoji} ${food.name}！`, 'success');
+  }
+  saveState();
+}
+
+function redeemLegendary() {
+  if (state.gacha.shards < GACHA_SHARD_REDEEM) { showToast('碎片还不够哦~', 'warning'); return; }
+  state.gacha.shards -= GACHA_SHARD_REDEEM;
+  if (!state.pets.includes('p63')) {
+    state.pets.push('p63');
+    initPetState('p63');
+    if (!state.activePetId) state.activePetId = 'p63';
+  }
+  saveState();
+  launchConfetti();
+  showToast('🦖 召唤出传说神兽·九天神兽！', 'success');
+  renderGacha();
+}
+
+function depositSavings() {
+  const input = document.getElementById('savings-deposit-input');
+  let amt = parseInt(input.value, 10);
+  if (!amt || amt <= 0) { showToast('请输入要存入的金额', 'warning'); return; }
+  amt = Math.min(amt, state.coins);
+  if (amt <= 0) { showToast('金币不够存哦~', 'warning'); return; }
+  state.coins -= amt;
+  state.savings.saved += amt;
+  saveState();
+  updateCoinDisplay();
+  showToast(`🐷 存入储蓄罐 ${amt} 金`, 'success');
+  renderGacha();
+}
+
+function setSavingsGoal() {
+  const input = document.getElementById('savings-goal-input');
+  let g = parseInt(input.value, 10);
+  if (!g || g <= 0) { showToast('请输入目标金额', 'warning'); return; }
+  state.savings.goal = g;
+  saveState();
+  showToast(`目标设定为 ${g} 金`, 'success');
+  renderGacha();
+}
+
+function redeemSavings() {
+  const s = state.savings;
+  if (!s.goal || s.saved < s.goal) { showToast('还没存够目标哦~', 'warning'); return; }
+  s.saved = 0;
+  const owned = new Set(state.pets);
+  const pool = PETS.filter(p => p.rarity === '传说' && !p.redeemOnly && !owned.has(p.id));
+  if (pool.length) {
+    const pet = pool[Math.floor(Math.random() * pool.length)];
+    state.pets.push(pet.id);
+    initPetState(pet.id);
+    if (!state.activePetId) state.activePetId = pet.id;
+    saveState();
+    launchConfetti();
+    showToast(`🎉 储蓄达成！解锁传说神兽 ${pet.emoji}${pet.name}`, 'success');
+  } else {
+    ['f21', 'f8', 'f4'].forEach(id => { state.foodInventory[id] = (state.foodInventory[id] || 0) + 2; });
+    saveState();
+    launchConfetti();
+    showToast('🎉 储蓄达成！获得豪华宠物大礼包', 'success');
+  }
+  renderGacha();
 }
 
 // ==================== 任务系统 ====================
@@ -6989,6 +7415,7 @@ function switchTab(tab) {
     case 'learn': renderLearn(); break;
     case 'progress': renderProgress(); break;
     case 'company': renderCompany(); break;
+    case 'gacha': renderGacha(); break;
   }
 }
 
