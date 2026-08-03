@@ -523,7 +523,7 @@ body::after {
 .pet-display-area {
   background: linear-gradient(180deg, #f5f1ff 0%, #ece4fb 70%, #e3d8f4 100%);
   border-radius: var(--radius-lg);
-  padding: 22px 22px 26px;
+  padding: 18px 18px 22px;
   text-align: center;
   box-shadow: var(--shadow-sm);
   position: relative;
@@ -622,7 +622,7 @@ body::after {
 }
 
 .pet-emoji-large {
-  font-size: 120px;
+  font-size: 100px;
   line-height: 1.4;
   display: inline-block;
   position: relative;
@@ -631,7 +631,7 @@ body::after {
   /* 3D 球体 */
   background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.25) 40%, rgba(0,0,0,0.06) 100%);
   border-radius: 50%;
-  padding: 16px 24px;
+  padding: 12px 20px;
   transform: rotateX(8deg) rotateY(-6deg);
   box-shadow:
     0 6px 20px rgba(0,0,0,0.12),
@@ -675,8 +675,8 @@ body::after {
 }
 
 .pet-adult-img {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
   display: inline-block;
   position: relative;
@@ -870,15 +870,13 @@ body::after {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  max-height: 440px;
-  overflow-y: auto;
   align-content: start;
   padding-right: 2px;
 }
 .ph-card {
   background: var(--bg-card);
   border-radius: var(--radius-md);
-  padding: 12px 6px 10px;
+  padding: 10px 4px 8px;
   text-align: center;
   cursor: pointer;
   border: 2px solid transparent;
@@ -888,11 +886,11 @@ body::after {
 .ph-card:hover { border-color: var(--primary-light); transform: translateY(-2px); }
 .ph-card.active { border-color: var(--primary); background: var(--bg-soft); }
 .ph-card-emoji {
-  font-size: 30px;
+  font-size: 26px;
   display: inline-block;
   background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 50%, rgba(0,0,0,0.03) 100%);
   border-radius: 50%;
-  padding: 6px 10px;
+  padding: 5px 9px;
   transform: rotateX(5deg) rotateY(-3deg);
   box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 -4px 10px rgba(0,0,0,0.04), inset 0 2px 6px rgba(255,255,255,0.4);
   transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
@@ -1098,6 +1096,15 @@ body::after {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+@supports (height: 100dvh) {
+  .pet-sidebar {
+    max-height: calc(100dvh - 160px);
+  }
 }
 
 .pet-sidebar h3 {
@@ -3735,30 +3742,6 @@ body::after {
   background: linear-gradient(90deg, #E8A598, #D4897A);
   border-radius: 10px;
   transition: width 0.5s ease;
-}
-.gacha-pity-track {
-  position: relative;
-  height: 26px;
-  background: #F0E6EF;
-  border: 1px solid #EBD3E4;
-  border-radius: 14px;
-  overflow: hidden;
-  margin-bottom: 6px;
-}
-.gacha-pity-progress {
-  height: 100%;
-  background: linear-gradient(90deg, #C9A7E0, #A87FCB);
-  border-radius: 14px;
-  transition: width 0.5s ease;
-}
-.gacha-pity-label {
-  position: absolute;
-  left: 0; right: 0; top: 0; bottom: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: bold; color: #5B3A6B;
-  text-shadow: 0 1px 1px rgba(255,255,255,0.6);
-  white-space: nowrap;
-  padding: 0 8px;
 }
 .gacha-redeem-btn {
   width: 100%; margin-bottom: 6px;
