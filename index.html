@@ -3681,6 +3681,78 @@ body::after {
 
 .gacha-tip { font-size: 12px; color: #9a6b1e; margin-top: 10px; line-height: 1.5; text-align: center; }
 
+/* ===== 神兽收藏馆 ===== */
+.gacha-collection {
+  margin-top: 18px;
+  background: linear-gradient(160deg, #1b1140 0%, #2a1a5e 60%, #3a2270 100%);
+  border-radius: var(--radius-lg);
+  padding: 18px 16px 16px;
+  box-shadow: var(--shadow-md);
+  color: #fff;
+}
+.gacha-collection-head { text-align: center; margin-bottom: 14px; }
+.gacha-collection-title {
+  display: block; font-size: 19px; font-weight: 700; color: #FFD98A;
+  text-shadow: 0 2px 8px rgba(255,180,60,0.4);
+}
+.gacha-collection-sub { display: block; font-size: 12px; color: #C9B8FF; margin-top: 3px; }
+
+.shard-showcase {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 12px 14px; margin-bottom: 14px;
+}
+.shard-crystal {
+  width: 56px; height: 56px; flex: 0 0 56px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #6ec3ff 0%, #3a7bf0 55%, #6a3ad0 100%);
+  box-shadow: 0 0 0 4px rgba(120,160,255,0.25), 0 6px 14px rgba(0,0,0,0.35);
+}
+.shard-crystal-icon { font-size: 28px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
+.shard-showcase.lit .shard-crystal {
+  animation: shardPulse 1.8s ease-in-out infinite;
+}
+@keyframes shardPulse {
+  0%,100% { transform: scale(1); box-shadow: 0 0 0 4px rgba(120,200,255,0.45), 0 0 18px 3px rgba(90,150,255,0.5); }
+  50% { transform: scale(1.08); box-shadow: 0 0 0 6px rgba(120,200,255,0.6), 0 0 30px 8px rgba(90,150,255,0.8); }
+}
+.shard-text b { font-size: 16px; color: #EAF2FF; }
+.shard-text small { display: block; font-size: 11px; color: #B9C6E8; margin-top: 2px; }
+
+.legend-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+.legend-card {
+  border-radius: 14px; padding: 12px 6px 10px;
+  text-align: center; position: relative;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  transition: transform var(--transition-fast);
+}
+.legend-card.owned {
+  background: linear-gradient(160deg, rgba(255,255,255,0.16), rgba(255,255,255,0.05));
+  border-color: var(--rc, #FFD98A);
+  box-shadow: 0 0 0 1px var(--rc, #FFD98A), 0 6px 16px rgba(0,0,0,0.35);
+  animation: legendFloat 3s ease-in-out infinite;
+}
+@keyframes legendFloat {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.legend-emoji { font-size: 38px; line-height: 1; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)); }
+.legend-card.locked .legend-emoji { filter: grayscale(1) brightness(0.5); opacity: 0.5; }
+.legend-name { font-size: 12px; margin-top: 6px; color: #EAF2FF; font-weight: 600; }
+.legend-card.locked .legend-name { color: #8b93b5; }
+.legend-rarity {
+  display: inline-block; font-size: 10px; padding: 1px 8px; border-radius: 10px;
+  margin-top: 5px; font-weight: 700;
+}
+.legend-card.locked .legend-rarity { background: #444a66 !important; color: #9aa3c4 !important; }
+.gacha-collection-tip { font-size: 12px; color: #C9B8FF; margin-top: 12px; line-height: 1.5; text-align: center; }
+
 @media (max-width: 600px) {
   .gacha-machine-real { width: 100%; }
   .gacha-glass-dome { width: 150px; height: 150px; }
@@ -3688,6 +3760,7 @@ body::after {
   .gacha-status-pill { max-width: none; width: 100%; }
   .savings-set, .savings-deposit { flex-direction: column; align-items: stretch; }
   .savings-set .btn-secondary, .savings-deposit .btn-primary { width: 100%; }
+  .legend-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* 公司每日封顶提示 */
@@ -4181,6 +4254,7 @@ const PET_FOODS = [
 const GACHA_COST = 30;            // 每次扭蛋花费
 const GACHA_DAILY_LIMIT = 10;     // 每日最多扭蛋次数（防沉迷）
 const GACHA_SHARD_REDEEM = 10;    // 集齐多少神兽碎片兑换传说神兽
+const GACHA_LEGEND_POOL = ['p63', 'p10', 'p20', 'p30', 'p44', 'p53', 'p54']; // 收藏馆图鉴：扭蛋召唤 + 储蓄解锁的传说神兽
 // 扭蛋奖池（weight 为权重，每次必中一项）
 const GACHA_LOOT = [
   { type: 'food', id: 'f1',  weight: 18 },
@@ -5366,6 +5440,7 @@ let state = {
     shards: 0,             // 神兽碎片数量
     todayDraws: 0,         // 今日已扭蛋次数
     dailyKey: null,        // 日期标记（用于重置每日次数）
+    collection: [],        // 扭蛋/储蓄获得的神兽收藏（id 列表）
   },
   savings: {
     goal: 0,               // 储蓄目标
@@ -5428,7 +5503,8 @@ function loadState() {
     if (!state.company.name) state.company.name = '毛孩子有限公司';
     if (state.company.dailyKey === undefined) state.company.dailyKey = null;
     if (state.company.dailyEarned === undefined) state.company.dailyEarned = 0;
-    if (!state.gacha) state.gacha = { shards: 0, todayDraws: 0, dailyKey: null };
+    if (!state.gacha) state.gacha = { shards: 0, todayDraws: 0, dailyKey: null, collection: [] };
+    if (!state.gacha.collection) state.gacha.collection = [];
     if (!state.savings) state.savings = { goal: 0, saved: 0 };
   } catch (e) {
     console.error('加载失败:', e);
@@ -6856,6 +6932,36 @@ function renderGacha() {
         ${canRedeemSav ? '🎁 达成目标！领取奖励' : '存够目标可领取奖励'}
       </button>
     </div>
+
+    <!-- 神兽收藏馆 -->
+    <div class="gacha-collection">
+      <div class="gacha-collection-head">
+        <span class="gacha-collection-title">🏆 神兽收藏馆</span>
+        <span class="gacha-collection-sub">扭蛋 &amp; 储蓄解锁的传说神兽</span>
+      </div>
+      <div class="shard-showcase ${shards > 0 ? 'lit' : ''}">
+        <div class="shard-crystal"><span class="shard-crystal-icon">🔷</span></div>
+        <div class="shard-text">
+          <b>神兽碎片 ×${shards}</b>
+          <small>集齐 ${GACHA_SHARD_REDEEM} 枚召唤九天神兽</small>
+        </div>
+      </div>
+      <div class="legend-grid">
+        ${GACHA_LEGEND_POOL.map(id => {
+          const p = PETS.find(x => x.id === id);
+          if (!p) return '';
+          const owned = (state.gacha.collection || []).includes(id);
+          const rc = RARITY_CONFIG[p.rarity] || RARITY_CONFIG['普通'];
+          return `
+            <div class="legend-card ${owned ? 'owned' : 'locked'}" data-rarity="${p.rarity}" style="${owned ? `--rc:${rc.color};` : ''}">
+              <div class="legend-emoji">${owned ? p.emoji : '❓'}</div>
+              <div class="legend-name">${owned ? p.name : '未解锁'}</div>
+              <div class="legend-rarity" style="background:${rc.color};color:#fff;">${p.rarity}</div>
+            </div>`;
+        }).join('')}
+      </div>
+      <p class="gacha-collection-tip">💡 抽到的碎片攒满可召唤九天神兽；存钱达成目标解锁更多传说神兽。已获得的都会在这里展示！</p>
+    </div>
   `;
 }
 
@@ -6956,6 +7062,7 @@ function redeemLegendary() {
     initPetState('p63');
     if (!state.activePetId) state.activePetId = 'p63';
   }
+  if (!state.gacha.collection.includes('p63')) state.gacha.collection.push('p63');
   saveState();
   launchConfetti();
   showToast('🦖 召唤出传说神兽·九天神兽！', 'success');
@@ -6995,6 +7102,7 @@ function redeemSavings() {
   if (pool.length) {
     const pet = pool[Math.floor(Math.random() * pool.length)];
     state.pets.push(pet.id);
+    if (!state.gacha.collection.includes(pet.id)) state.gacha.collection.push(pet.id);
     initPetState(pet.id);
     if (!state.activePetId) state.activePetId = pet.id;
     saveState();
