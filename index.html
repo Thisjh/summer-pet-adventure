@@ -1408,6 +1408,11 @@ body::after {
   color: #856404;
 }
 
+.learn-section-title .badge.yesterday {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
 .learn-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -5178,6 +5183,14 @@ function todayStr() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+function getTodayKey() { return todayStr(); }
+
+function getYesterdayKey() {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 function getDaysBetween(date1, date2) {
   const d1 = new Date(date1);
   const d2 = new Date(date2);
@@ -6793,6 +6806,24 @@ function renderLearn() {
   const todayDone = Object.keys(state.learningProgress).filter(k => state.learningProgress[k]).length;
   const todayTotal = dailyReview.length + dailyPreview.length;
 
+  // 记录今日轮换内容（供明日"昨日复习"使用）
+  const todayKey = getTodayKey();
+  if (!state.dailyLearnLog) state.dailyLearnLog = {};
+  state.dailyLearnLog[todayKey] = { review: dailyReview.map(i => i.id), preview: dailyPreview.map(i => i.id) };
+  saveState();
+
+  // 获取昨日的学习内容
+  const yesterdayKey = getYesterdayKey();
+  const yesterdayItems = (state.dailyLearnLog && state.dailyLearnLog[yesterdayKey])
+    ? state.dailyLearnLog[yesterdayKey]
+    : null;
+
+  // 固定口算练习（位置1：乘法口诀+表内除法，仅数学科目显示）
+  const mathPracticeExtra = (currentSubject === 'math') ? [
+    subject.review.find(i => i.id === 'm_r_14'),
+    subject.review.find(i => i.id === 'm_r_15'),
+  ].filter(Boolean) : [];
+
   let html = `
     <div class="learn-daily-banner">
       <span class="learn-daily-icon">📅</span>
@@ -6806,6 +6837,7 @@ function renderLearn() {
       </div>
       <div class="learn-grid">
         ${dailyReview.map(item => renderLearnCard(item, 'review')).join('')}
+        ${mathPracticeExtra.map(item => renderLearnCard(item, 'review')).join('')}
       </div>
     </div>
     <div class="learn-section">
@@ -6819,13 +6851,36 @@ function renderLearn() {
     </div>
   `;
 
+  // 位置2：昨日复习（仅当有昨日数据时显示）
+  if (yesterdayItems && (yesterdayItems.review.length > 0 || yesterdayItems.preview.length > 0)) {
+    const yesterdayReviewIds = new Set(yesterdayItems.review);
+    const yesterdayPreviewIds = new Set(yesterdayItems.preview);
+    const allYesterdayItems = [
+      ...subject.review.filter(i => yesterdayReviewIds.has(i.id)),
+      ...subject.preview.filter(i => yesterdayPreviewIds.has(i.id)),
+    ];
+    if (allYesterdayItems.length > 0) {
+      html += `
+        <div class="learn-section">
+          <div class="learn-section-title">
+            🔄 昨日复习
+            <span class="badge yesterday">巩固记忆</span>
+          </div>
+          <div class="learn-grid">
+            ${allYesterdayItems.map(item => renderLearnCard(item, 'yesterday')).join('')}
+          </div>
+        </div>
+      `;
+    }
+  }
+
   container.innerHTML = html;
 }
 
 function renderLearnCard(item, type) {
   const done = state.learningProgress[item.id];
-  const typeNames = { flashcard: '闪卡学习', quiz: '趣味测验', practice: '练习题' };
-  const typeIcons = { flashcard: '🎴', quiz: '❓', practice: '✏️' };
+  const typeNames = { flashcard: '闪卡学习', quiz: '趣味测验', practice: '练习题', word_problem: '应用题', reading: '阅读' };
+  const typeIcons = { flashcard: '🎴', quiz: '❓', practice: '✏️', word_problem: '📝', reading: '📖' };
   return `
     <div class="learn-card ${done ? 'completed' : ''}" onclick="openLearnActivity('${item.id}', '${item.type}', '${item.title}')">
       <div class="learn-card-header">
