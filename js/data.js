@@ -250,6 +250,7 @@ const PET_FOODS = [
 const GACHA_COST = 10;            // 每次扭蛋花费
 const GACHA_DAILY_LIMIT = 10;     // 每日最多扭蛋次数（防沉迷）
 const GACHA_SHARD_REDEEM = 10;    // 集齐多少神兽碎片兑换传说神兽
+const GACHA_PITY_COINS = 500;     // 累计扭蛋花费达此数必得九天神兽召唤资格（保底）
 const GACHA_LEGEND_POOL = ['p63', 'p10', 'p20', 'p30', 'p44', 'p53', 'p54']; // 收藏馆图鉴：扭蛋召唤 + 储蓄解锁的传说神兽
 // 扭蛋奖池（weight 为权重，每次必中一项）
 const GACHA_LOOT = [
