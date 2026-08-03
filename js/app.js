@@ -796,12 +796,20 @@ function openFeedModal(petId) {
   let foodHtml = PET_FOODS.map(food => {
     const owned = state.foodInventory[food.id] || 0;
     const canBuy = state.coins >= food.price;
+    const useBtn = owned > 0
+      ? `<button class="food-use-btn" onclick="useInventoryFood('${petId}', '${food.id}')">使用 ×${owned}</button>`
+      : '';
+    const buyBtn = canBuy
+      ? `<button class="food-buy-btn" onclick="buyAndFeed('${petId}', '${food.id}')">购买 🪙${food.price}</button>`
+      : `<button class="food-buy-btn" disabled>🪙${food.price}</button>`;
     return `
-      <div class="food-option ${canBuy ? '' : 'disabled'}" onclick="${canBuy ? `buyAndFeed('${petId}', '${food.id}')` : ''}">
-        <span class="food-emoji">${food.emoji}</span>
-        <span class="food-name">${food.name}</span>
-        <span class="food-price">🪙 ${food.price}</span>
-        <span class="food-effect">饱+${food.hunger} 乐+${food.happiness}${food.energy ? ' 体+'+food.energy : ''}</span>
+      <div class="food-option">
+        <div class="food-row1">
+          <span class="food-emoji">${food.emoji}</span>
+          <span class="food-name">${food.name}</span>
+          <span class="food-effect">饱+${food.hunger} 乐+${food.happiness}${food.energy ? ' 体+'+food.energy : ''}</span>
+        </div>
+        <div class="food-row2">${useBtn}${buyBtn}</div>
       </div>
     `;
   }).join('');
@@ -1447,6 +1455,31 @@ function buyFood(foodId) {
   showToast(`购买了 ${food.emoji} ${food.name}！`, 'success');
 }
 
+// 使用背包里（扭蛋抽到/购买得到）的食物免费喂宠物
+function useInventoryFood(petId, foodId) {
+  const food = PET_FOODS.find(f => f.id === foodId);
+  const pet = PETS.find(p => p.id === petId);
+  if (!food || !pet) { showToast('先选一只宠物再喂食哦~', 'warning'); return; }
+  if ((state.foodInventory[foodId] || 0) <= 0) { showToast('背包里没有这个食物啦~', 'warning'); return; }
+
+  state.foodInventory[foodId] -= 1;
+  if (state.foodInventory[foodId] <= 0) delete state.foodInventory[foodId];
+
+  const ps = state.petStates[petId] || initPetState(petId);
+  ps.hunger = Math.min(100, ps.hunger + food.hunger);
+  ps.happiness = Math.min(100, ps.happiness + food.happiness);
+  ps.energy = Math.min(100, ps.energy + (food.energy || 0));
+  ps.lastUpdate = Date.now();
+  state.petStates[petId] = ps;
+
+  saveState();
+  closeFeedModal();
+  renderPetHome();
+  renderGacha();
+  showToast(`${getPetDisplayName(petId)} 吃了背包里的${food.name}，好开心！${food.emoji}`, 'success');
+  triggerFeedAnimation(petId, food);
+}
+
 // ==================== 扭蛋机 + 储蓄罐 ====================
 function renderGacha() {
   const panel = document.getElementById('gacha-content');
@@ -1481,7 +1514,9 @@ function renderGacha() {
     const r = 10 + Math.random() * 18;
     const x = 8 + Math.random() * 74;
     const y = 8 + Math.random() * 74;
-    return `<span class="gacha-ball-mini" style="--gc:${c};--gr:${r}px;left:${x}%;top:${y}%;"></span>`;
+    const bjDur = (0.7 + Math.random() * 0.7).toFixed(2);
+    const bjDelay = (-Math.random() * 1.2).toFixed(2);
+    return `<span class="gacha-ball-mini" style="--gc:${c};--gr:${r}px;left:${x}%;top:${y}%;--bj-dur:${bjDur}s;--bj-delay:${bjDelay}s;"></span>`;
   }).join('');
 
   panel.innerHTML = `
@@ -1578,6 +1613,32 @@ function renderGacha() {
       ${lastPrizeHtml}
       <span class="glp-shards">🔷 现有神兽碎片 <b>${shards}</b> / ${GACHA_SHARD_REDEEM}</span>
     </div>
+
+    <!-- 我的食物背包：抽到的食物在这里查看并使用 -->
+    <div class="gacha-food-bag">
+      <div class="gfb-head">
+        <span class="gfb-title">🎒 我的食物背包</span>
+        <span class="gfb-sub">扭蛋抽到的食物都收在这里，点「喂食」免费喂给宠物</span>
+      </div>
+      <div class="gfb-grid">
+        ${(() => {
+          const entries = Object.entries(state.foodInventory || {}).filter(([id, n]) => n > 0);
+          if (!entries.length) return '<div class="gfb-empty">背包空空，去扭蛋抽食物吧~</div>';
+          return entries.map(([id, n]) => {
+            const f = PET_FOODS.find(x => x.id === id);
+            if (!f) return '';
+            const hasPet = !!state.activePetId;
+            return `
+              <div class="gfb-chip">
+                <span class="gfb-emoji">${f.emoji}</span>
+                <span class="gfb-name">${f.name}</span>
+                <span class="gfb-count">×${n}</span>
+                <button class="gfb-feed" ${hasPet ? '' : 'disabled'} onclick="useInventoryFood('${state.activePetId || ''}', '${id}')">喂食</button>
+              </div>`;
+          }).join('');
+        })()}
+      </div>
+    </div>
   `;
 }
 
@@ -1614,9 +1675,9 @@ function drawCapsule() {
   const chuteDoor = document.getElementById('gacha-chute-door');
   const tray = document.getElementById('gacha-prize-tray');
 
-  // 1. 旋钮旋转 + 灯光闪烁 + 球舱震动
+  // 1. 旋钮旋转 + 灯光闪烁 + 球舱震动 + 小球在里面跳动
   if (knob) knob.classList.add('spinning');
-  if (ballsLayer) ballsLayer.classList.add('shaking');
+  if (ballsLayer) { ballsLayer.classList.add('shaking'); ballsLayer.classList.add('bouncing'); }
   if (ledRing) ledRing.classList.add('flashing');
 
   setTimeout(() => {
@@ -1648,7 +1709,7 @@ function drawCapsule() {
       // 清理动画状态
       setTimeout(() => {
         if (knob) knob.classList.remove('spinning');
-        if (ballsLayer) ballsLayer.classList.remove('shaking');
+        if (ballsLayer) { ballsLayer.classList.remove('shaking'); ballsLayer.classList.remove('bouncing'); }
         if (ledRing) ledRing.classList.remove('flashing');
         if (chuteDoor) chuteDoor.classList.remove('open');
         if (dropBall) dropBall.remove();
