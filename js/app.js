@@ -547,7 +547,8 @@ function getPetMediaHtml(petId, sizeClass) {
   }
   // 默认emoji
   const emoji = getPetGrowthEmoji(petId);
-  return `<span>${emoji}</span>`;
+  const cls = sizeClass || 'pet-emoji-large';
+  return `<span class="${cls}">${emoji}</span>`;
 }
 
 // 获取宠物展示HTML（带wrapper）
