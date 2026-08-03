@@ -102,9 +102,11 @@ function loadState() {
     if (!state.company.name) state.company.name = '毛孩子有限公司';
     if (state.company.dailyKey === undefined) state.company.dailyKey = null;
     if (state.company.dailyEarned === undefined) state.company.dailyEarned = 0;
-    if (!state.gacha) state.gacha = { shards: 0, todayDraws: 0, dailyKey: null, collection: [], lastPrize: null };
+    if (!state.gacha) state.gacha = { shards: 0, todayDraws: 0, dailyKey: null, collection: [], lastPrize: null, totalSpent: 0, pityBase: 0 };
     if (!state.gacha.collection) state.gacha.collection = [];
     if (state.gacha.lastPrize === undefined) state.gacha.lastPrize = null;
+    if (!state.gacha.totalSpent) state.gacha.totalSpent = 0;
+    if (!state.gacha.pityBase) state.gacha.pityBase = 0;
     if (!state.savings) state.savings = { goal: 0, saved: 0 };
   } catch (e) {
     console.error('加载失败:', e);
@@ -1366,7 +1368,7 @@ function renderShop() {
           <div class="shop-item-rarity" style="background:${rc.color};color:#fff;">${dragon.rarity}</div>
           <div class="shop-item-desc">${dragon.desc}</div>
           <div class="pd-locked-badge ${owned ? 'owned' : ''}">${owned ? '✅ 已拥有' : '🔒 无法购买'}</div>
-          <div class="pd-get-hint">${owned ? '🎉 你已通过「幸运扭蛋」集齐碎片召唤它！' : `🎰 在「幸运扭蛋」集齐 ${GACHA_SHARD_REDEEM} 枚神兽碎片召唤`}</div>
+          <div class="pd-get-hint">${owned ? '🎉 你已通过「幸运扭蛋」召唤它！' : `🎰 在「幸运扭蛋」集齐 ${GACHA_SHARD_REDEEM} 枚神兽碎片，或累计花费 ${GACHA_PITY_COINS} 金币必得召唤资格`}</div>
         </div>`;
     }
     PETS.forEach(pet => {
@@ -1489,6 +1491,11 @@ function renderGacha() {
   const drawsLeft = Math.max(0, GACHA_DAILY_LIMIT - state.gacha.todayDraws);
   const shards = state.gacha.shards || 0;
   const canRedeem = shards >= GACHA_SHARD_REDEEM;
+  const totalSpent = state.gacha.totalSpent || 0;
+  const pityBase = state.gacha.pityBase || 0;
+  const pityProgressCoins = Math.max(0, totalSpent - pityBase);
+  const pityPct = Math.min(100, pityProgressCoins / GACHA_PITY_COINS * 100);
+  const pityLeft = Math.max(0, GACHA_PITY_COINS - pityProgressCoins);
   const s = state.savings;
   const goal = s.goal || 0;
   const saved = s.saved || 0;
@@ -1574,7 +1581,12 @@ function renderGacha() {
       <button class="btn-secondary gacha-redeem-btn" onclick="redeemLegendary()" ${canRedeem ? '' : 'disabled'}>
         ${canRedeem ? '✨ 召唤传说神兽' : '集齐 10 枚碎片可召唤'}
       </button>
-      <p class="gacha-tip">💡 扭蛋必中：宠物粮 或 神兽碎片（不会空手）</p>
+      <!-- 500金币保底进度 -->
+      <div class="gacha-pity-track" title="累计扭蛋花费达 ${GACHA_PITY_COINS} 金币，必得九天神兽召唤资格">
+        <div class="gacha-pity-progress" style="width:${pityPct}%"></div>
+        <span class="gacha-pity-label">🛡️ 保底进度 ${pityProgressCoins}/${GACHA_PITY_COINS} 金币${shards < GACHA_SHARD_REDEEM ? `（再花 ${pityLeft} 金必得召唤资格）` : '（已可召唤）'}</span>
+      </div>
+      <p class="gacha-tip">💡 扭蛋必中宠物粮或神兽碎片；集齐 10 碎片，或累计花费 ${GACHA_PITY_COINS} 金币，必得九天神兽召唤资格</p>
     </div>
 
     <!-- 成长储蓄罐 -->
@@ -1662,6 +1674,7 @@ function drawCapsule() {
   window._gachaBusy = true;
   state.coins -= GACHA_COST;
   state.gacha.todayDraws += 1;
+  state.gacha.totalSpent += GACHA_COST;
   updateCoinDisplay();
   saveState();
 
@@ -1702,6 +1715,7 @@ function drawCapsule() {
       if (tray) tray.appendChild(reveal);
 
       applyGachaReward(pick);
+      checkGachaPity();
       state.gacha.lastPrize = pick.type === 'shard' ? { type: 'shard' } : { type: 'food', id: pick.id };
       saveState();
       if (isRare) launchConfetti();
@@ -1731,6 +1745,21 @@ function applyGachaReward(pick) {
     showToast(`获得 ${food.emoji} ${food.name}！`, 'success');
   }
   saveState();
+}
+
+// 500金币保底：累计扭蛋花费达标且尚未获得召唤资格时，自动补齐碎片资格
+function checkGachaPity() {
+  const g = state.gacha;
+  const shards = g.shards || 0;
+  const spentSince = (g.totalSpent || 0) - (g.pityBase || 0);
+  if (shards < GACHA_SHARD_REDEEM && spentSince >= GACHA_PITY_COINS) {
+    const need = GACHA_SHARD_REDEEM - shards;
+    g.shards += need;
+    g.pityBase = g.totalSpent;
+    saveState();
+    launchConfetti();
+    showToast('🛡️ 500金币保底达成！已获得九天神兽召唤资格', 'success');
+  }
 }
 
 function redeemLegendary() {
