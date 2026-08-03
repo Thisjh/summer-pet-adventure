@@ -1748,7 +1748,7 @@ function checkGachaPity() {
     g.pityBase = g.totalSpent;
     saveState();
     launchConfetti();
-    showToast('🛡️ 500金币保底达成！已获得九天神兽召唤资格', 'success');
+    showToast('🎉 你已集齐 10 枚神兽碎片，可以召唤九天神兽啦！', 'success');
   }
 }
 
