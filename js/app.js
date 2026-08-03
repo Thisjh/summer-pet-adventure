@@ -1368,7 +1368,7 @@ function renderShop() {
           <div class="shop-item-rarity" style="background:${rc.color};color:#fff;">${dragon.rarity}</div>
           <div class="shop-item-desc">${dragon.desc}</div>
           <div class="pd-locked-badge ${owned ? 'owned' : ''}">${owned ? '✅ 已拥有' : '🔒 无法购买'}</div>
-          <div class="pd-get-hint">${owned ? '🎉 你已通过「幸运扭蛋」召唤它！' : `🎰 在「幸运扭蛋」集齐 ${GACHA_SHARD_REDEEM} 枚神兽碎片，或累计花费 ${GACHA_PITY_COINS} 金币必得召唤资格`}</div>
+          <div class="pd-get-hint">${owned ? '🎉 你已通过「幸运扭蛋」召唤它！' : `🎰 在「幸运扭蛋」集齐 ${GACHA_SHARD_REDEEM} 枚神兽碎片召唤`}</div>
         </div>`;
     }
     PETS.forEach(pet => {
@@ -1491,11 +1491,6 @@ function renderGacha() {
   const drawsLeft = Math.max(0, GACHA_DAILY_LIMIT - state.gacha.todayDraws);
   const shards = state.gacha.shards || 0;
   const canRedeem = shards >= GACHA_SHARD_REDEEM;
-  const totalSpent = state.gacha.totalSpent || 0;
-  const pityBase = state.gacha.pityBase || 0;
-  const pityProgressCoins = Math.max(0, totalSpent - pityBase);
-  const pityPct = Math.min(100, pityProgressCoins / GACHA_PITY_COINS * 100);
-  const pityLeft = Math.max(0, GACHA_PITY_COINS - pityProgressCoins);
   const s = state.savings;
   const goal = s.goal || 0;
   const saved = s.saved || 0;
@@ -1581,12 +1576,7 @@ function renderGacha() {
       <button class="btn-secondary gacha-redeem-btn" onclick="redeemLegendary()" ${canRedeem ? '' : 'disabled'}>
         ${canRedeem ? '✨ 召唤传说神兽' : '集齐 10 枚碎片可召唤'}
       </button>
-      <!-- 500金币保底进度 -->
-      <div class="gacha-pity-track" title="累计扭蛋花费达 ${GACHA_PITY_COINS} 金币，必得九天神兽召唤资格">
-        <div class="gacha-pity-progress" style="width:${pityPct}%"></div>
-        <span class="gacha-pity-label">🛡️ 保底进度 ${pityProgressCoins}/${GACHA_PITY_COINS} 金币${shards < GACHA_SHARD_REDEEM ? `（再花 ${pityLeft} 金必得召唤资格）` : '（已可召唤）'}</span>
-      </div>
-      <p class="gacha-tip">💡 扭蛋必中宠物粮或神兽碎片；集齐 10 碎片，或累计花费 ${GACHA_PITY_COINS} 金币，必得九天神兽召唤资格</p>
+      <p class="gacha-tip">💡 扭蛋必中宠物粮或神兽碎片，集齐 10 枚碎片即可召唤传说神兽</p>
     </div>
 
     <!-- 成长储蓄罐 -->
