@@ -1956,10 +1956,25 @@ function renderLearn() {
   // 每日轮换：复习选2项，预习选2项（少于则全显示）
   const dailyReview = getDailyLearnItems(subject.review, 2);
   const dailyPreview = getDailyLearnItems(subject.preview, 2);
-  const todayDone = Object.keys(state.learningProgress).filter(k => state.learningProgress[k]).length;
-  const todayTotal = dailyReview.length + dailyPreview.length;
 
-  // 记录今日轮换内容（供明日"昨日复习"使用）
+  // 固定额外内容：数学口算练习 / 语文每日大声朗读
+  const mathPracticeExtra = (currentSubject === 'math') ? [
+    subject.review.find(i => i.id === 'm_r_14'),
+    subject.review.find(i => i.id === 'm_r_15'),
+  ].filter(Boolean) : [];
+  const chineseReadingExtra = (currentSubject === 'chinese') ? [
+    subject.review.find(i => i.id === 'c_r_14'),
+  ].filter(Boolean) : [];
+  const fixedExtras = [...mathPracticeExtra, ...chineseReadingExtra];
+
+  const baseTotal = dailyReview.length + dailyPreview.length;
+  const todayTotal = baseTotal + fixedExtras.length;
+  const todayReward = dailyReview.reduce((s, i) => s + (i.reward || 5), 0)
+                    + dailyPreview.reduce((s, i) => s + (i.reward || 5), 0)
+                    + fixedExtras.reduce((s, i) => s + (i.reward || 5), 0);
+  const todayDone = Object.keys(state.learningProgress).filter(k => state.learningProgress[k]).length;
+
+  // 记录今日轮换内容（供明日"昨日复习"使用），固定内容不记入昨日复习
   const todayKey = getTodayKey();
   if (!state.dailyLearnLog) state.dailyLearnLog = {};
   state.dailyLearnLog[todayKey] = { review: dailyReview.map(i => i.id), preview: dailyPreview.map(i => i.id) };
@@ -1971,16 +1986,10 @@ function renderLearn() {
     ? state.dailyLearnLog[yesterdayKey]
     : null;
 
-  // 固定口算练习（位置1：乘法口诀+表内除法，仅数学科目显示）
-  const mathPracticeExtra = (currentSubject === 'math') ? [
-    subject.review.find(i => i.id === 'm_r_14'),
-    subject.review.find(i => i.id === 'm_r_15'),
-  ].filter(Boolean) : [];
-
   let html = `
     <div class="learn-daily-banner">
       <span class="learn-daily-icon">📅</span>
-      <span class="learn-daily-text">今日${subject.name}学习 · 每天${todayTotal}项新内容，完成可得 ${todayTotal * 5} 🪙</span>
+      <span class="learn-daily-text">今日${subject.name}学习 · 每天${todayTotal}项新内容，完成可得 ${todayReward} 🪙</span>
       <span class="learn-daily-progress">${todayDone}/${todayTotal} 已完成</span>
     </div>
     <div class="learn-section">
@@ -1991,6 +2000,7 @@ function renderLearn() {
       <div class="learn-grid">
         ${dailyReview.map(item => renderLearnCard(item, 'review')).join('')}
         ${mathPracticeExtra.map(item => renderLearnCard(item, 'review')).join('')}
+        ${chineseReadingExtra.map(item => renderLearnCard(item, 'review')).join('')}
       </div>
     </div>
     <div class="learn-section">
@@ -2032,10 +2042,11 @@ function renderLearn() {
 
 function renderLearnCard(item, type) {
   const done = state.learningProgress[item.id];
-  const typeNames = { flashcard: '闪卡学习', quiz: '趣味测验', practice: '练习题', word_problem: '应用题', reading: '阅读' };
-  const typeIcons = { flashcard: '🎴', quiz: '❓', practice: '✏️', word_problem: '📝', reading: '📖' };
+  const typeNames = { flashcard: '闪卡学习', quiz: '趣味测验', practice: '练习题', word_problem: '应用题', reading: '阅读', reading_aloud: '大声朗读' };
+  const typeIcons = { flashcard: '🎴', quiz: '❓', practice: '✏️', word_problem: '📝', reading: '📖', reading_aloud: '🎤' };
   // 优先使用题目独立图标，无则按类型回退
   const cardIcon = item.icon || (typeIcons[item.type] || '📌');
+  const reward = item.reward || 5;
   return `
     <div class="learn-card ${done ? 'completed' : ''}" onclick="openLearnActivity('${item.id}', '${item.type}', '${item.title}')">
       <div class="learn-card-header">
@@ -2044,7 +2055,7 @@ function renderLearnCard(item, type) {
       </div>
       <div class="learn-card-desc">${item.desc}</div>
       <span class="learn-card-type">${done ? '已完成 ✓' : typeNames[item.type]}</span>
-      <div class="learn-card-reward">完成奖励：🪙 +5</div>
+      <div class="learn-card-reward">完成奖励：🪙 +${reward}</div>
     </div>
   `;
 }
@@ -2061,6 +2072,8 @@ function openLearnActivity(itemId, type, title) {
     openPractice(itemId, title, overlay, content);
   } else if (type === 'reading') {
     openReading(itemId, title, overlay, content);
+  } else if (type === 'reading_aloud') {
+    openReadingAloud(itemId, title, overlay, content);
   }
 }
 
@@ -2467,14 +2480,135 @@ function openReading(itemId, title, overlay, content) {
   overlay.classList.add('active');
 }
 
-function finishLearn(itemId) {
+// --- 大声朗读：西游记精选（每天一篇，循环20篇）---
+const JOURNEY_TO_THE_WEST = [
+  {
+    title: '第一回 猴王出世',
+    content: '很久很久以前，在东胜神洲的大海边，有一座美丽的花果山。山顶上有一块神奇的仙石，它吸收日月精华，一天突然裂开，从里面蹦出一只石猴。石猴眼睛闪闪发光，望向四面八方。他很快就和山上的猴子们成了好朋友。有一天，猴子们发现山后有一道瀑布，大家都说，谁敢跳进去再出来，我们就拜他为王。石猴勇敢地跳了进去，发现里面是一个没有水的山洞，名叫水帘洞。于是，所有的猴子都拜他为大王，大家叫他美猴王。'
+  },
+  {
+    title: '第二回 拜师学艺',
+    content: '美猴王在花果山快乐地生活了很久，但他想学习长生不老的本领。于是他乘着小木筏，漂洋过海，来到西牛贺洲。他走过许多山川河流，终于在一座深山中找到一位神仙，名叫菩提祖师。祖师见石猴聪明伶俐，收他为徒，并给他取名叫孙悟空。悟空在山上学了七年洒扫、挑水、念经，后来又学了三年真正的本领。他学会了七十二变，还会一个筋斗翻十万八千里。学成之后，悟空告别师父，回到了花果山。'
+  },
+  {
+    title: '第三回 龙宫借宝',
+    content: '孙悟空回到花果山，猴子们都很高兴。可是悟空觉得自己的兵器不够好，听说东海龙宫有很多宝贝，就决定去借一件。他一个筋斗翻到东海，进入水晶宫。龙王见到他很害怕，拿出大刀、长枪给他看，悟空都觉得太轻。最后龙王带他去看一根定海神针铁，原来是大禹治水时留下的神铁，上面写着“如意金箍棒”，重一万三千五百斤。悟空说：“再小一点！”神铁真的变小了。悟空拿在手里，高兴极了，龙王虽然心疼，也只好送给他。'
+  },
+  {
+    title: '第四回 大闹天宫（一）',
+    content: '孙悟空得了金箍棒，本领更大了。玉帝派人来招他上天做官，封他做弼马温。悟空以为是个大官，认真地养马。后来他听说弼马温只是个管马的小官，非常生气，回到花果山，自己封自己为“齐天大圣”。玉帝又派天兵天将来捉他，可是谁也打不过悟空。玉帝没有办法，只好真的封他为“齐天大圣”，让他管理蟠桃园。悟空在蟠桃园里吃了很多仙桃，还偷喝了天上的仙酒。'
+  },
+  {
+    title: '第五回 大闹天宫（二）',
+    content: '王母娘娘要开蟠桃大会，邀请了天上所有的神仙，可是没有请孙悟空。悟空很生气，他变成赤脚大仙的样子，先闯进蟠桃会。他看到桌上摆满了美酒佳肴，还有太上老君炼的金丹，就大吃大喝起来。吃完后，他用袋子装了许多好吃的，带回花果山给猴子们。玉帝知道后大怒，派十万天兵天将去捉拿悟空。悟空毫不害怕，举起金箍棒，打得天兵天将落花流水。'
+  },
+  {
+    title: '第六回 二郎神捉悟空',
+    content: '天兵天将都打不过孙悟空，观音菩萨推荐二郎神来帮忙。二郎神有三只眼，身边还有一只神犬叫哮天犬。二郎神和孙悟空大战三百回合，不分胜负。他们比变化，悟空变成麻雀，二郎神变成老鹰；悟空变成小鱼，二郎神变成鱼鹰。最后太上老君抛出一个金钢琢，正好打在悟空头上，悟空头晕眼花，被二郎神捉住。可是普通的刀砍斧劈都伤不了悟空。'
+  },
+  {
+    title: '第七回 如来佛压悟空',
+    content: '玉帝把孙悟空交给太上老君，放进炼丹炉里烧了四十九天。可是悟空不但没有烧死，反而炼出了一双火眼金睛，能看穿妖怪的变化。他从炉子里跳出来，又打进凌霄宝殿。玉帝吓得连忙请如来佛祖帮忙。如来佛祖问悟空：“你为什么要造反？”悟空说：“我要做玉帝！”如来和他打赌，如果他一个筋斗能翻出如来手掌心，就让他做玉帝。悟空一个筋斗翻了十万八千里，看到五根大柱子，以为是天边，还在一根柱子上撒了尿。回来一看，那原来是如来的五根手指。如来把手一翻，将悟空压在五行山下。'
+  },
+  {
+    title: '第八回 唐僧身世',
+    content: '五百年后，唐朝有一位和尚叫陈玄奘，大家都叫他唐僧。唐僧从小在寺庙里长大，心地善良，一心向佛。有一天，观音菩萨来到长安，告诉唐太宗，西方有大乘佛经，可以超度众生。唐太宗决定派人去西天取经，选中了唐僧。临行前，唐太宗和唐僧结为兄弟，送他一匹白马和一些随从。唐僧骑着马，告别长安，踏上了漫漫西行之路。他不知道，前面有许许多多的危险在等着他。'
+  },
+  {
+    title: '第九回 五行山救出孙悟空',
+    content: '唐僧一个人走了很久，来到一座大山脚下。忽然听到有人在喊：“师父！师父！”唐僧吓了一跳，顺着声音找去，发现山下压着一只猴子，只露出头和手。那猴子说：“我是五百年前大闹天宫的齐天大圣，被如来佛祖压在这里。观音菩萨让我等一个去西天取经的师父，请您救我出来。”唐僧很可怜他，可是山上的金字压帖他揭不下来。猴子说：“你走到山顶，把金字帖揭了就行。”唐僧照做了，只听一声巨响，孙悟空从山里跳了出来，拜唐僧为师。'
+  },
+  {
+    title: '第十回 收服白龙马',
+    content: '唐僧和孙悟空继续西行。有一天，他们来到一条大河边，唐僧骑的白马突然大叫一声，被河里的一条白龙吃掉了。孙悟空很生气，跳到空中大骂。白龙跳出水面，和悟空打了起来。白龙打不过悟空，变成一条小白蛇躲进草丛。观音菩萨正好路过，告诉悟空，这条白龙本是西海龙王的三太子，因为犯了错被贬到这里。菩萨让白龙变成一匹白马，驮唐僧去西天取经。从此唐僧有了白龙马。'
+  },
+  {
+    title: '第十一回 高老庄收八戒',
+    content: '唐僧和悟空来到一个叫高老庄的地方。高老爷愁眉苦脸地说，他家有个女婿叫猪八戒，原是一只猪妖，力气很大，把他的女儿关了起来。孙悟空变成高小姐的样子，等猪八戒回来。猪八戒一见到“高小姐”，就高兴地说：“娘子，我回来了！”悟空现出原形，和猪八戒打了起来。猪八戒打不过悟空，想逃跑。正好观音菩萨来了，告诉猪八戒，只要他跟唐僧去西天取经，就能修成正果。猪八戒答应了，唐僧给他取名猪八戒。'
+  },
+  {
+    title: '第十二回 流沙河收沙僧',
+    content: '师徒三人来到一条叫流沙河的大河边，河水又宽又急。河里突然跳出一个红头发的妖怪，拿着一根大杖来抢唐僧。孙悟空和猪八戒一起上前打他。妖怪打不过，躲进河里不出来。孙悟空去请观音菩萨帮忙。菩萨派木吒来了，对妖怪说：“你本是天上的卷帘大将，不小心打碎了琉璃盏，被贬下界。现在机会来了，快随唐僧取经吧！”妖怪听了，从河里出来，拜唐僧为师。唐僧给他取名沙和尚，也叫沙僧。'
+  },
+  {
+    title: '第十三回 偷吃人参果',
+    content: '唐僧师徒来到一座叫万寿山五庄观的地方。观里有一棵神奇的人参果树，三千年一开花，三千年一结果，果子长得像小娃娃。观主镇元大仙出门了，让两个童子招待唐僧。童子摘了两个人参果给唐僧吃，唐僧吓得不敢吃。孙悟空听说了，偷偷打了三个果子，和猪八戒、沙僧分着吃了。两个童子发现后大骂唐僧。孙悟空一气之下，把人参果树推倒了。后来孙悟空请来观音菩萨，用净瓶里的甘露水救活了果树。'
+  },
+  {
+    title: '第十四回 三打白骨精（一）',
+    content: '师徒四人走到一座荒山上，唐僧饿了，让孙悟空去找吃的。悟空刚走，山里就跳出一个妖怪，叫白骨精。她听说吃了唐僧肉可以长生不老，就想抓住唐僧。白骨精变成一个年轻的村姑，提着篮子走过来，篮子里装着馒头。她笑着说：“长老，吃点馒头吧。”唐僧正要接，孙悟空回来了，他火眼金睛一看，认出是妖怪，举起金箍棒就打。妖怪急忙飞走，地上只剩下一堆白骨。唐僧很生气，责怪悟空乱打人。'
+  },
+  {
+    title: '第十五回 三打白骨精（二）',
+    content: '白骨精不死心，又变成一个老婆婆，哭着走过来，说是在找自己的女儿。孙悟空又看出来她是妖怪，一棒打去。白骨精又逃走了。唐僧更加生气，念起了紧箍咒，疼得悟空在地上打滚。白骨精第三次变成一个老公公，说要找老伴和女儿。孙悟空忍着痛，再次认出妖怪，把她彻底打死了。可是唐僧以为悟空连续打死三个好人，伤心地写下一纸贬书，说：“你走吧，我不要你这个徒弟了。”孙悟空只好含泪离开了师父。'
+  },
+  {
+    title: '第十六回 智取红孩儿',
+    content: '唐僧被一个叫红孩儿的妖怪抓走了。红孩儿是牛魔王和铁扇公主的儿子，会喷三昧真火，连孙悟空都怕。孙悟空请来龙王下雨，可是雨水浇不灭三昧真火。孙悟空没办法，只好变成牛魔王的样子去骗红孩儿，可是被识破了。最后孙悟空请来观音菩萨。菩萨用金箍儿套住红孩儿，收他做善财童子。红孩儿改邪归正，唐僧也得救了。观音菩萨告诉红孩儿，做好事比做坏事快乐得多。'
+  },
+  {
+    title: '第十七回 车迟国斗法',
+    content: '师徒来到车迟国，这里的国王被三个妖怪国师骗了，他们欺负和尚。这三个国师分别是虎力大仙、鹿力大仙和羊力大仙。孙悟空不服气，和他们比法术。第一场比求雨，悟空请来风神、雷神，下起大雨。第二场比坐禅，悟空变成小虫子咬虎力大仙，让他摔下来。第三场比砍头、剖腹、下油锅，悟空用法术赢了他们。三个妖怪现出原形，原来是一只老虎、一只鹿和一只羊。国王终于醒悟，向唐僧道歉。'
+  },
+  {
+    title: '第十八回 真假美猴王',
+    content: '有一天，唐僧又责备了孙悟空。悟空委屈地走到一边，忽然出现了一个和他长得一模一样的猴子，连金箍棒都一样。假悟空打晕唐僧，抢走了行李。真悟空回来后非常生气，两个悟空打成一团，谁也分不清真假。他们先到观音菩萨那里，又到玉帝那里，最后到如来佛祖那里。如来佛祖说：“假悟空是六耳猕猴变的。”六耳猕猴被识破，想逃跑，被如来用金钵罩住。真悟空一棒打死了六耳猕猴，师徒和好如初。'
+  },
+  {
+    title: '第十九回 三借芭蕉扇',
+    content: '师徒四人来到火焰山，山上大火熊熊，谁也过不去。要想过山，必须借铁扇公主的芭蕉扇。铁扇公主是红孩儿的母亲，因为悟空请观音菩萨收服了红孩儿，她很恨悟空。第一次借扇，悟空被铁扇公主一扇子扇到五万里外。第二次，悟空变成小虫子钻进铁扇公主肚子里，公主疼得只好借给他一把假扇。第三次，悟空变成牛魔王的样子，终于骗到了真扇子。可是牛魔王又变成猪八戒的样子，把扇子骗回去了。最后在天兵天将的帮助下，悟空才借到真芭蕉扇，扇灭了火焰山的大火。'
+  },
+  {
+    title: '第二十回 取得真经',
+    content: '唐僧师徒历经九九八十一难，终于来到西天灵山。如来佛祖见他们诚心诚意，让阿难、迦叶两位尊者带他们去藏经阁取经。师徒四人取了五千零四十八卷真经，高高兴兴地准备回唐朝。可是通天河的老龟又来找他们，原来老龟托唐僧问如来自己什么时候能修成人形，唐僧忘了问。老龟很生气，把师徒和经书都翻到河里。大家爬上岸，晒干了经书。最后，唐僧把真经带回长安，受到万众欢迎。师徒四人都修成了正果，孙悟空成了斗战胜佛。'
+  }
+];
+
+function openReadingAloud(itemId, title, overlay, content) {
+  // 根据日期从 20 篇中循环选取今天的一篇
+  const today = todayStr();
+  let hash = 0;
+  for (let i = 0; i < today.length; i++) {
+    hash = (hash * 31 + today.charCodeAt(i)) & 0x7fffffff;
+  }
+  const idx = hash % JOURNEY_TO_THE_WEST.length;
+  const piece = JOURNEY_TO_THE_WEST[idx];
+
+  content.innerHTML = `
+    <div class="modal-header">
+      <h2>🎤 ${title}</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div style="padding:16px;max-height:60vh;overflow-y:auto;">
+      <div style="background:#FFF8E1;border-radius:12px;padding:16px;margin-bottom:16px;border-left:4px solid #FFB300;">
+        <div style="font-weight:bold;font-size:18px;margin-bottom:10px;color:#5D4037;">${piece.title}</div>
+        <div style="line-height:1.85;color:#4E342E;font-size:16px;">${piece.content}</div>
+      </div>
+      <div style="background:#E8F5E9;border-radius:12px;padding:14px 16px;margin-bottom:18px;">
+        <div style="font-weight:bold;color:#2E7D32;margin-bottom:6px;">📣 小任务</div>
+        <div style="color:#388E3C;line-height:1.6;">
+          请找<strong>爸爸妈妈</strong>做观众，大声朗读上面的内容。<br>
+          每篇约 3 分钟，读完后请他们给你点个大大的赞 👍
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-primary" onclick="finishLearn('${itemId}', 20)">
+          我完成朗读啦！+20🪙
+        </button>
+      </div>
+    </div>
+  `;
+  overlay.classList.add('active');
+}
+
+function finishLearn(itemId, reward = 5) {
   if (!state.learningProgress[itemId]) {
     state.learningProgress[itemId] = true;
     state.learningCompleted++;
-    addCoins(5);
+    addCoins(reward);
     saveState();
     checkAchievements();
-    showToast('学习完成！+5🪙', 'success');
+    showToast(`学习完成！+${reward}🪙`, 'success');
     launchConfetti();
   }
   closeModal();
