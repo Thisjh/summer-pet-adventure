@@ -248,7 +248,7 @@ const PET_FOODS = [
 
 // ========== 扭蛋机配置 ==========
 const GACHA_COST = 10;            // 每次扭蛋花费
-const GACHA_DAILY_LIMIT = 10;     // 每日最多扭蛋次数（防沉迷）
+const GACHA_DAILY_LIMIT = 15;     // 每日最多扭蛋次数（防沉迷）
 const GACHA_SHARD_REDEEM = 10;    // 集齐多少神兽碎片兑换传说神兽
 const GACHA_PITY_COINS = 500;     // 累计扭蛋花费达此数必得九天神兽召唤资格（保底）
 const GACHA_LEGEND_POOL = ['p63', 'p10', 'p20', 'p30', 'p44', 'p53', 'p54']; // 收藏馆图鉴：扭蛋召唤 + 储蓄解锁的传说神兽
@@ -314,6 +314,7 @@ const CHINESE_REVIEW = [
   { id: 'c_r_11', title: '扩写句子', type: 'quiz', desc: '让句子更具体生动', icon: '✍️' },
   { id: 'c_r_12', title: '词语搭配', type: 'quiz', desc: '动词名词正确搭配', icon: '🔗' },
   { id: 'c_r_13', title: '寓言故事', type: 'flashcard', desc: '经典寓言道理回顾', icon: '🦊' },
+  { id: 'c_r_14', title: '大声朗读', type: 'reading_aloud', desc: '西游记精选片段，约3分钟，请找爸爸妈妈做观众', icon: '🎤', reward: 20 },
 ];
 
 const CHINESE_PREVIEW = [
